@@ -37,7 +37,7 @@ Page({
         }
       }
       // 图片URL需要完整路径才能在小程序显示
-      const IMAGE_BASE = 'http://8.134.189.98:3000';
+      const IMAGE_BASE = 'https://d2025bbf545a5f5e-8-134-189-98.serveousercontent.com';
       obs.images = (images || []).map(img => 
         img.startsWith('http') ? img : IMAGE_BASE + img
       );
