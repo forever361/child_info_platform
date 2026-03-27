@@ -150,8 +150,8 @@ Page({
         await api.updateObservation(id, { ...data, images: JSON.stringify(allImages) });
         wx.showToast({ title: '更新成功', icon: 'success' });
         
-        // 更新后直接跳转详情页
-        wx.redirectTo({ url: `/pages/detail/detail?id=${id}` });
+        // 更新后重新加载详情页
+        wx.reLaunch({ url: `/pages/detail/detail?id=${id}` });
       } else {
         // 新建模式：上传所有图片
         await api.createObservation(data, images);
