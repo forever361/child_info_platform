@@ -41,9 +41,12 @@ Page({
       }
       // 图片URL需要完整路径才能在小程序显示
       const IMAGE_BASE = 'http://8.134.189.98:3000';
-      images = (images || []).map(img => 
-        img.startsWith('http') ? img : IMAGE_BASE + img
-      );
+      images = (images || []).map(img => {
+        // 如果已经是完整URL，直接返回
+        if (img.startsWith('http')) return img;
+        // 否则添加前缀
+        return IMAGE_BASE + img;
+      });
       
       this.setData({
         recordType: obs.record_type,
@@ -117,10 +120,12 @@ Page({
 
       if (id) {
         // 编辑模式：区分已保存的图片和新增的图片
-        // 已保存的图片包含完整URL或 /files/ 路径
-        const existingImages = images.filter(img => 
-          img.includes('/files/') || img.startsWith('http')
-        );
+        // 已保存的图片需要提取相对路径 /files/xxx
+        const IMAGE_BASE = 'http://8.134.189.98:3000';
+        const existingImages = images
+          .filter(img => img.includes('/files/') || img.startsWith('http'))
+          .map(img => img.startsWith(IMAGE_BASE) ? img.replace(IMAGE_BASE, '') : img);
+        
         const newImages = images.filter(img => 
           img.startsWith('http://tmp') || img.startsWith('wxfile://')
         );
@@ -136,6 +141,9 @@ Page({
         
         await api.updateObservation(id, { ...data, images: JSON.stringify(allImages) });
         wx.showToast({ title: '更新成功', icon: 'success' });
+        
+        // 刷新页面数据
+        this.loadData(id);
       } else {
         // 新建模式：上传所有图片
         await api.createObservation(data, images);
