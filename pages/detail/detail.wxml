@@ -1,0 +1,68 @@
+<view class="container" wx:if="{{observation}}">
+  <!-- 基本信息 -->
+  <view class="card">
+    <view class="header">
+      <text class="target">{{observation.target_name}}</text>
+      <text class="type">{{observation.record_type === 'individual' ? '个体' : '事件'}}</text>
+    </view>
+    <view class="meta">
+      <text>{{observation.user_name}} · {{observation.user_class}}</text>
+      <text>{{observation.created_at}}</text>
+    </view>
+  </view>
+
+  <!-- 观察记录 -->
+  <view class="card">
+    <view class="card-title">观察记录</view>
+    <view class="content">{{observation.content || '暂无'}}</view>
+  </view>
+
+  <!-- 行为分析 -->
+  <view class="card">
+    <view class="card-title">行为分析</view>
+    <view class="content analysis">{{observation.analysis || '暂无'}}</view>
+  </view>
+
+  <!-- 图片 -->
+  <view class="card" wx:if="{{observation.images && observation.images.length > 0}}">
+    <view class="card-title">现场照片</view>
+    <view class="images">
+      <image
+        wx:for="{{observation.images}}"
+        wx:key="index"
+        src="{{item}}"
+        mode="aspectFill"
+        bindtap="previewImage"
+        data-url="{{item}}"
+      />
+    </view>
+  </view>
+
+  <!-- 连续观察 -->
+  <view class="card" wx:if="{{linkedList.length > 1}}">
+    <view class="card-title">连续观察 ({{linkedList.length}}条)</view>
+    <view class="linked-list">
+      <view
+        class="linked-item"
+        wx:for="{{linkedList}}"
+        wx:key="id"
+        bindtap="goDetail"
+        data-id="{{item.id}}"
+      >
+        <text class="time">{{item.created_at}}</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <button type="default" bindtap="continueObserve">继续观察</button>
+    <button type="default" bindtap="goEdit">编辑</button>
+    <button type="warn" bindtap="handleDelete">删除</button>
+  </view>
+</view>
+
+<view class="loading" wx:else>
+  <text>加载中...</text>
+</view>

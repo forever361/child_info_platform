@@ -1,0 +1,59 @@
+<view class="container">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="user-info">
+      <text class="name">{{user.name}}</text>
+      <text class="role">{{user.role === 'admin' ? '园长' : '教师'}}</text>
+    </view>
+    <view class="logout" bindtap="logout">退出</view>
+  </view>
+
+  <!-- 搜索筛选 -->
+  <view class="filter-bar">
+    <view class="search-input">
+      <input placeholder="搜索幼儿姓名/事件" bindconfirm="onSearch" />
+    </view>
+    <picker bindchange="onTypeChange" value="{{recordType}}" range="{{[{value:'',label:'全部'},{value:'individual',label:'个体'},{value:'event',label:'事件'}]}}" range-key="label">
+      <view class="type-picker">
+        {{recordType === 'individual' ? '个体' : recordType === 'event' ? '事件' : '全部'}}
+      </view>
+    </picker>
+  </view>
+
+  <!-- 记录列表 -->
+  <scroll-view scroll-y class="list" bindscrolltolower="onReachBottom">
+    <view class="empty" wx:if="{{list.length === 0 && !loading}}">
+      <text>暂无记录</text>
+      <text class="tip">点击下方按钮创建第一条记录</text>
+    </view>
+
+    <view class="item" wx:for="{{list}}" wx:key="id">
+      <view class="item-main" bindtap="goDetail" data-id="{{item.id}}">
+        <view class="item-header">
+          <text class="target-name">{{item.target_name}}</text>
+          <text class="record-type">{{item.record_type === 'individual' ? '个体' : '事件'}}</text>
+        </view>
+        <view class="item-content">{{item.content || '暂无内容'}}</view>
+        <view class="item-footer">
+          <text class="user">{{item.user_name}}</text>
+          <text class="time">{{item.created_at}}</text>
+        </view>
+      </view>
+      <view class="item-actions">
+        <view class="delete-btn" catchtap="handleDelete" data-id="{{item.id}}">删除</view>
+      </view>
+    </view>
+
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+    <view class="no-more" wx:if="{{noMore && list.length > 0}}">
+      <text>没有更多了</text>
+    </view>
+  </scroll-view>
+
+  <!-- 新建按钮 -->
+  <view class="add-btn" bindtap="goRecord">
+    <text>+</text>
+  </view>
+</view>

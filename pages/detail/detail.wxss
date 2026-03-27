@@ -1,0 +1,142 @@
+.container {
+  padding: 24rpx;
+  padding-bottom: 220rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.target {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.type {
+  font-size: 22rpx;
+  color: #4f46e5;
+  background: #eef2ff;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+  color: #1f2937;
+}
+
+.content {
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #4b5563;
+  white-space: pre-wrap;
+}
+
+.analysis {
+  background: #f9fafb;
+  padding: 24rpx;
+  border-radius: 12rpx;
+  border-left: 4rpx solid #4f46e5;
+}
+
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.images image {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 12rpx;
+}
+
+.linked-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.linked-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background: #f9fafb;
+  border-radius: 10rpx;
+}
+
+.linked-item .time {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+.linked-item .arrow {
+  color: #9ca3af;
+}
+
+.actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx 32rpx;
+  background: #fff;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.actions button {
+  flex: 1;
+  height: 88rpx;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+}
+
+.actions button:first-child {
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+}
+
+.actions button:nth-child(2) {
+  background: #eef2ff;
+  color: #4f46e5;
+  border: none;
+}
+
+.actions button:last-child {
+  background: #fef2f2;
+  color: #ef4444;
+  border: none;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  color: #9ca3af;
+}

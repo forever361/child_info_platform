@@ -1,0 +1,10 @@
+<view class="container">
+  <view class="title">昌乐幼</view>
+  <view class="subtitle">幼儿观察记录本</view>
+
+  <button class="login-btn" type="primary" bindtap="handleWxLogin" loading="{{loading}}">
+    {{loading ? '登录中...' : '微信授权登录'}}
+  </button>
+
+  <view class="tips">登录后可创建和管理幼儿观察记录</view>
+</view>

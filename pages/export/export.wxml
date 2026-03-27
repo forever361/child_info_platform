@@ -1,0 +1,99 @@
+<view class="container">
+  <view class="card">
+    <view class="card-title">导出方式</view>
+    <radio-group bindchange="onExportTypeChange">
+      <label class="radio-item">
+        <radio value="single" checked="{{exportType === 'single'}}" />
+        <text>导出选中记录</text>
+      </label>
+      <label class="radio-item">
+        <radio value="today" checked="{{exportType === 'today'}}" />
+        <text>导出今日记录</text>
+      </label>
+      <label class="radio-item">
+        <radio value="linked" checked="{{exportType === 'linked'}}" />
+        <text>导出连续观察</text>
+      </label>
+      <label class="radio-item">
+        <radio value="custom" checked="{{exportType === 'custom'}}" />
+        <text>自定义筛选</text>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="card">
+    <view class="card-title">导出格式</view>
+    <radio-group bindchange="onFormatChange">
+      <label class="radio-item">
+        <radio value="excel" checked="{{exportFormat === 'excel'}}" />
+        <text>Excel (.xlsx)</text>
+      </label>
+      <label class="radio-item">
+        <radio value="word" checked="{{exportFormat === 'word'}}" />
+        <text>Word (.doc)</text>
+      </label>
+    </radio-group>
+  </view>
+
+  <!-- 自定义筛选 -->
+  <view class="card" wx:if="{{exportType === 'custom'}}">
+    <view class="card-title">筛选条件</view>
+    <view class="form-item">
+      <text>幼儿姓名</text>
+      <input placeholder="输入姓名筛选" data-field="targetName" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <text>开始日期</text>
+      <picker mode="date" bindchange="onInput" data-field="startDate">
+        <view>{{startDate || '选择日期'}}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text>结束日期</text>
+      <picker mode="date" bindchange="onInput" data-field="endDate">
+        <view>{{endDate || '选择日期'}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 串联ID输入 -->
+  <view class="card" wx:if="{{exportType === 'linked'}}">
+    <view class="form-item">
+      <text>串联ID</text>
+      <input placeholder="输入串联ID" data-field="linkedId" bindinput="onInput" />
+    </view>
+  </view>
+
+  <!-- 选择记录 -->
+  <view class="card" wx:if="{{exportType === 'single' || exportType === 'custom'}}">
+    <view class="card-title">
+      <text>选择记录 ({{selectedIds.length}})</text>
+      <view class="ops">
+        <text bindtap="selectAll">全选</text>
+        <text bindtap="clearSelection">清空</text>
+      </view>
+    </view>
+    <view class="record-list">
+      <view
+        class="record-item {{selectedIds.indexOf(item.id) > -1 ? 'selected' : ''}}"
+        wx:for="{{list}}"
+        wx:key="id"
+        bindtap="onSelectRecord"
+        data-id="{{item.id}}"
+      >
+        <checkbox checked="{{selectedIds.indexOf(item.id) > -1}}" />
+        <view class="info">
+          <text class="name">{{item.target_name}}</text>
+          <text class="time">{{item.created_at}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 导出按钮 -->
+  <view class="submit-bar">
+    <button type="primary" bindtap="handleExport" loading="{{exporting}}">
+      {{exporting ? '导出中...' : '开始导出'}}
+    </button>
+  </view>
+</view>
