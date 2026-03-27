@@ -39,7 +39,7 @@ Page({
 
   doLogin(code, userInfo) {
     wx.request({
-      url: 'http://8.134.189.98:3000/api/auth/login',
+      url: 'https://aixint.cn/api/auth/login',
       method: 'POST',
       header: { 'Content-Type': 'application/json' },
       data: {

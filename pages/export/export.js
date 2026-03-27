@@ -111,7 +111,7 @@ Page({
       if (res.success) {
         // 打开文件
         wx.downloadFile({
-          url: 'http://8.134.189.98:3000' + res.file,
+          url: 'https://aixint.cn' + res.file,
           success: (downRes) => {
             wx.openDocument({
               filePath: downRes.tempFilePath,
