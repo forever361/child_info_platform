@@ -193,7 +193,7 @@ router.post('/upload', authMiddleware, upload.single('image'), async (req, res) 
 // 创建记录
 router.post('/', authMiddleware, upload.array('images', 9), async (req, res) => {
   try {
-    const { record_type, target_name, content, analysis, linked_id } = req.body;
+    const { record_type, target_name, content, analysis, linked_id, images: imagesFromBody } = req.body;
 
     if (!record_type || !target_name) {
       return res.status(400).json({ error: '缺少必要参数' });
@@ -201,8 +201,17 @@ router.post('/', authMiddleware, upload.array('images', 9), async (req, res) => 
 
     // 处理图片
     let images = [];
+    // 优先从 req.files 获取（multipart form 上传）
     if (req.files && req.files.length > 0) {
       images = req.files.map(f => `/files/images/${f.filename}`);
+    }
+    // 如果没有文件，则从 req.body.images 获取（JSON 格式，已通过 /upload 接口上传）
+    else if (imagesFromBody) {
+      try {
+        images = JSON.parse(imagesFromBody);
+      } catch (e) {
+        images = [];
+      }
     }
 
     // 如果没有linked_id，生成新的
@@ -228,7 +237,7 @@ router.post('/', authMiddleware, upload.array('images', 9), async (req, res) => 
 router.put('/:id', authMiddleware, upload.array('images', 9), async (req, res) => {
   try {
     const { id } = req.params;
-    const { record_type, target_name, content, analysis, keep_images } = req.body;
+    const { record_type, target_name, content, analysis, keep_images, images: imagesFromBody } = req.body;
 
     // 检查权限
     const [rows] = await pool.execute(
@@ -257,9 +266,17 @@ router.put('/:id', authMiddleware, upload.array('images', 9), async (req, res) =
       newImages = [...existingImages.filter(img => keepArr.includes(img))];
     }
 
+    // 从文件上传获取
     if (req.files && req.files.length > 0) {
       const newImgPaths = req.files.map(f => `/files/images/${f.filename}`);
       newImages = [...newImages, ...newImgPaths];
+    }
+    // 或从 req.body.images 获取（JSON 格式，已通过 /upload 接口上传）
+    else if (imagesFromBody) {
+      try {
+        const parsedNewImages = JSON.parse(imagesFromBody);
+        newImages = [...newImages, ...parsedNewImages];
+      } catch (e) {}
     }
 
     await pool.execute(
