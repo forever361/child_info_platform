@@ -120,15 +120,22 @@ Page({
 
       if (id) {
         // 编辑模式：区分已保存的图片和新增的图片
-        // 已保存的图片需要提取相对路径 /files/xxx
         const IMAGE_BASE = 'http://8.134.189.98:3000';
-        const existingImages = images
-          .filter(img => img.includes('/files/') || img.startsWith('http'))
-          .map(img => img.startsWith(IMAGE_BASE) ? img.replace(IMAGE_BASE, '') : img);
         
-        const newImages = images.filter(img => 
-          img.startsWith('http://tmp') || img.startsWith('wxfile://')
-        );
+        // 已保存的图片：来自服务器，包含 /files/ 或完整URL
+        // 新增的图片：来自本地，格式为 http://tmp/ 或 wxfile://
+        const existingImages = [];
+        const newImages = [];
+        
+        images.forEach(img => {
+          if (img.startsWith('http://tmp') || img.startsWith('wxfile://')) {
+            // 本地临时图片，是新增的
+            newImages.push(img);
+          } else {
+            // 来自服务器的图片，需要提取相对路径
+            existingImages.push(img.startsWith(IMAGE_BASE) ? img.replace(IMAGE_BASE, '') : img);
+          }
+        });
         
         // 先上传新增的图片
         let allImages = [...existingImages];
@@ -139,10 +146,10 @@ Page({
           }
         }
         
+        console.log('saving images:', allImages);
         await api.updateObservation(id, { ...data, images: JSON.stringify(allImages) });
         wx.showToast({ title: '更新成功', icon: 'success' });
         
-        // 等待图片上传完成后再刷新并返回
         this.setData({ loading: false });
         wx.navigateBack();
       } else {
