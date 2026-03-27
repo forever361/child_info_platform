@@ -19,12 +19,21 @@ Page({
       const res = await api.getObservation(id);
       const obs = res.observation;
       
-      // 解析 images 字段
-      let images = [];
-      try {
-        images = JSON.parse(obs.images || '[]');
-      } catch (e) {}
-      obs.images = images;
+      // 后端已解析 images 字段为数组，直接使用
+      // 如果是字符串则再解析一次（兼容旧数据）
+      let images = obs.images;
+      if (typeof images === 'string') {
+        try {
+          images = JSON.parse(images || '[]');
+        } catch (e) {
+          images = [];
+        }
+      }
+      // 图片URL需要完整路径才能在小程序显示
+      const IMAGE_BASE = 'http://8.134.189.98:3000';
+      obs.images = (images || []).map(img => 
+        img.startsWith('http') ? img : IMAGE_BASE + img
+      );
       
       this.setData({ observation: obs });
 

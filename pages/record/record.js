@@ -29,12 +29,28 @@ Page({
     try {
       const res = await api.getObservation(id);
       const obs = res.observation;
+      
+      // 后端已解析 images 字段为数组，直接使用
+      let images = obs.images;
+      if (typeof images === 'string') {
+        try {
+          images = JSON.parse(images || '[]');
+        } catch (e) {
+          images = [];
+        }
+      }
+      // 图片URL需要完整路径才能在小程序显示
+      const IMAGE_BASE = 'http://8.134.189.98:3000';
+      images = (images || []).map(img => 
+        img.startsWith('http') ? img : IMAGE_BASE + img
+      );
+      
       this.setData({
         recordType: obs.record_type,
         targetName: obs.target_name,
         content: obs.content,
         analysis: obs.analysis,
-        images: obs.images || []
+        images: images
       });
       console.log('loaded', obs);
     } catch (err) {
@@ -101,8 +117,13 @@ Page({
 
       if (id) {
         // 编辑模式：区分已保存的图片和新增的图片
-        const existingImages = images.filter(img => img.startsWith('/files/') || img.startsWith('http'));
-        const newImages = images.filter(img => img.startsWith('http://tmp') || img.startsWith('wxfile://'));
+        // 已保存的图片包含完整URL或 /files/ 路径
+        const existingImages = images.filter(img => 
+          img.includes('/files/') || img.startsWith('http')
+        );
+        const newImages = images.filter(img => 
+          img.startsWith('http://tmp') || img.startsWith('wxfile://')
+        );
         
         // 先上传新增的图片
         let allImages = [...existingImages];
