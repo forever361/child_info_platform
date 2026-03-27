@@ -40,7 +40,7 @@ Page({
         }
       }
       // 图片URL需要完整路径才能在小程序显示
-      const IMAGE_BASE = 'https://d2025bbf545a5f5e-8-134-189-98.serveousercontent.com';
+      const IMAGE_BASE = 'https://aixint.cn';
       images = (images || []).map(img => {
         // 如果已经是完整URL，直接返回
         if (img.startsWith('http')) return img;
@@ -120,7 +120,7 @@ Page({
 
       if (id) {
         // 编辑模式：区分已保存的图片和新增的图片
-        const IMAGE_BASE = 'https://d2025bbf545a5f5e-8-134-189-98.serveousercontent.com';
+        const IMAGE_BASE = 'https://aixint.cn';
         
         // 已保存的图片：来自服务器，包含 /files/ 或完整URL
         // 新增的图片：来自本地，格式为 http://tmp/ 或 wxfile://

@@ -1,4 +1,4 @@
-const API_BASE = 'https://d2025bbf545a5f5e-8-134-189-98.serveousercontent.com/api';
+const API_BASE = 'https://aixint.cn/api';
 
 const getToken = () => wx.getStorageSync('token');
 
