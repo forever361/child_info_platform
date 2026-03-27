@@ -53,18 +53,23 @@ export const uploadImage = (filePath) => {
       name: 'image',
       header: { Authorization: `Bearer ${token}` },
       success: (res) => {
-        if (res.statusCode === 200) {
-          try {
-            const result = JSON.parse(res.data);
+        console.log('upload response', res);
+        try {
+          const result = JSON.parse(res.data);
+          if (result.url) {
             resolve(result.url);
-          } catch (e) {
-            reject(new Error('解析响应失败'));
+          } else {
+            reject(new Error(result.error || '上传失败'));
           }
-        } else {
-          reject(new Error('上传失败'));
+        } catch (e) {
+          console.error('parse error', e);
+          reject(new Error('解析响应失败'));
         }
       },
-      fail: reject
+      fail: (err) => {
+        console.error('upload fail', err);
+        reject(new Error('上传失败'));
+      }
     });
   });
 };
