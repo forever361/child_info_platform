@@ -150,19 +150,10 @@ Page({
         await api.updateObservation(id, { ...data, images: JSON.stringify(allImages) });
         wx.showToast({ title: '更新成功', icon: 'success' });
         
-        // 更新后返回详情页并刷新数据
-        const pages = getCurrentPages();
-        const detailPage = pages.find(p => p.route && p.route.includes('detail'));
-        if (detailPage && detailPage.loadDetail) {
-          detailPage.loadDetail(id);
-        }
+        // 更新后直接返回详情页
         setTimeout(() => {
-          const success = wx.navigateBack({ delta: 1 });
-          if (!success) {
-            // 如果返回失败（已经是最底层），直接跳转详情页
-            wx.navigateTo({ url: `/pages/detail/detail?id=${id}` });
-          }
-        }, 100);
+          wx.navigateBack({ delta: 1 });
+        }, 500);
       } else {
         // 新建模式：上传所有图片
         await api.createObservation(data, images);
