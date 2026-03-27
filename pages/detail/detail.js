@@ -14,6 +14,13 @@ Page({
     }
   },
 
+  onShow() {
+    // 每次显示页面时刷新数据（从编辑页返回时）
+    if (this.data.observation && this.data.observation.id) {
+      this.loadDetail(this.data.observation.id);
+    }
+  },
+
   async loadDetail(id) {
     try {
       const res = await api.getObservation(id);

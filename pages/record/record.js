@@ -142,8 +142,9 @@ Page({
         await api.updateObservation(id, { ...data, images: JSON.stringify(allImages) });
         wx.showToast({ title: '更新成功', icon: 'success' });
         
-        // 刷新页面数据
-        this.loadData(id);
+        // 等待图片上传完成后再刷新并返回
+        this.setData({ loading: false });
+        wx.navigateBack();
       } else {
         // 新建模式：上传所有图片
         await api.createObservation(data, images);
