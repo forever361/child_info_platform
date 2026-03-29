@@ -6,6 +6,8 @@ Page({
     linkedId: null,
     recordType: 'individual',
     targetName: '',
+    classIndex: 0,
+    classList: ['小班1班', '小班2班', '中班1班', '中班2班', '大班1班', '大班2班'],
     content: '',
     analysis: '',
     images: [],
@@ -51,6 +53,8 @@ Page({
       this.setData({
         recordType: obs.record_type,
         targetName: obs.target_name,
+        className: obs.class_name,
+        classIndex: this.data.classList.indexOf(obs.class_name) || 0,
         content: obs.content,
         analysis: obs.analysis,
         images: images
@@ -92,6 +96,10 @@ Page({
     this.setData({ recordType: e.detail.value });
   },
 
+  onClassChange(e) {
+    this.setData({ classIndex: e.detail.value });
+  },
+
   onInput(e) {
     const field = e.currentTarget.dataset.field;
     console.log('input', field, e.detail.value);
@@ -106,11 +114,16 @@ Page({
       return wx.showToast({ title: '请输入观察对象*', icon: 'none' });
     }
 
+    if (!this.data.classList[this.data.classIndex]) {
+      return wx.showToast({ title: '请选择班级*', icon: 'none' });
+    }
+
     this.setData({ loading: true });
 
     try {
       const data = {
         record_type: recordType,
+        class_name: this.data.classList[this.data.classIndex],
         target_name: targetName,
         content: this.data.content,
         analysis: this.data.analysis,

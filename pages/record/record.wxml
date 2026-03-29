@@ -9,6 +9,15 @@
     </view>
 
     <view class="form-item">
+      <text class="label">班级 <text class="required">*</text></text>
+      <picker bindchange="onClassChange" value="{{classIndex}}" range="{{classList}}">
+        <view class="picker">
+          {{classList[classIndex] || '请选择班级'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
       <text class="label">观察对象 <text class="required">*</text></text>
       <input class="input" placeholder="请输入幼儿姓名或事件名称" value="{{targetName}}" data-field="targetName" bindinput="onInput" />
     </view>

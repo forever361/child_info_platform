@@ -14,7 +14,8 @@ Page({
 
   onLoad() {
     const user = wx.getStorageSync('user');
-    this.setData({ user });
+    const openid = wx.getStorageSync('openid') || '';
+    this.setData({ user, openid });
     this.fetchList();
   },
 

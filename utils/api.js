@@ -1,5 +1,5 @@
 const API_BASE = 'https://aixint.cn/api';
-
+const UPLOAD_BASE = 'https://upload.aixint.cn/api';
 const getToken = () => wx.getStorageSync('token');
 
 const request = (options) => {
@@ -48,7 +48,7 @@ export const uploadImage = (filePath) => {
   return new Promise((resolve, reject) => {
     const token = getToken();
     wx.uploadFile({
-      url: API_BASE + '/observations/upload',
+      url: UPLOAD_BASE + '/observations/upload',
       filePath: filePath,
       name: 'image',
       header: { Authorization: `Bearer ${token}` },

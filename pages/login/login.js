@@ -13,9 +13,7 @@ Page({
   onGetUserInfo(e) {
     if (this.data.loading) return;
 
-    const userInfo = e.detail.userInfo;
-    if (!userInfo) {
-      // 用户拒绝授权
+    if (!e.detail.userInfo) {
       wx.showToast({ title: '需要授权才能登录', icon: 'none' });
       return;
     }
@@ -25,7 +23,7 @@ Page({
     wx.login({
       success: (res) => {
         if (res.code) {
-          this.doLogin(res.code, userInfo);
+          this.doLogin(res.code, e.detail.userInfo);
         } else {
           wx.showToast({ title: '登录失败', icon: 'none' });
           this.setData({ loading: false });
@@ -54,6 +52,7 @@ Page({
         if (res.statusCode === 200 && res.data.token) {
           wx.setStorageSync('token', res.data.token);
           wx.setStorageSync('user', res.data.user);
+          wx.setStorageSync('openid', res.data.openid);
           wx.showToast({ title: '登录成功', icon: 'success' });
           setTimeout(() => {
             wx.navigateTo({ url: '/pages/home/home' });
@@ -62,7 +61,7 @@ Page({
           wx.showToast({ title: res.data.error || '登录失败', icon: 'none' });
         }
       },
-      fail: (err) => {
+      fail: () => {
         wx.showToast({ title: '网络错误', icon: 'none' });
       },
       complete: () => {

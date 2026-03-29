@@ -42,6 +42,14 @@
   border-color: #4f46e5;
 }
 
+.picker {
+  font-size: 28rpx;
+  background: #f9fafb;
+  padding: 24rpx;
+  border-radius: 12rpx;
+  border: 2rpx solid #f3f4f6;
+}
+
 .textarea {
   font-size: 28rpx;
   background: #f9fafb;

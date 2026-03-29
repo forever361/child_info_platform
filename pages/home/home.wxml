@@ -7,7 +7,7 @@
         <text wx:else class="avatar-text">{{user.name ? user.name[0] : '?'}}</text>
       </view>
       <view class="user-detail">
-        <text class="name">{{user.name || '用户'}}</text>
+        <text class="name">{{openid || user.name || '用户'}}</text>
         <text class="role">{{user.role === 'admin' ? '园长' : '教师'}}</text>
       </view>
     </view>
