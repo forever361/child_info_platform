@@ -32,6 +32,9 @@
   font-weight: 500;
   border: none;
   box-shadow: 0 4rpx 20rpx rgba(79, 70, 229, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-btn:active {
