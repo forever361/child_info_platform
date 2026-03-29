@@ -24,7 +24,7 @@
   <!-- 雷达图卡片 -->
   <view class="card radar-card">
     <view class="card-title">领域综合评级</view>
-    <canvas canvas-id="radarChart" class="radar-canvas" style="width:320px;height:400px"></canvas>
+    <canvas canvas-id="radarChart" class="radar-canvas" style="width:320px;height:320px"></canvas>
   </view>
 
   <!-- 趋势曲线卡片 -->

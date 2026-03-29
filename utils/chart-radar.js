@@ -7,10 +7,10 @@ function drawRadarChart(canvasId, domainSummary, canvasWidth) {
   if (!canvasId || !domainSummary || !domainSummary.length) return;
   const ctx = wx.createCanvasContext(canvasId);
   const width = canvasWidth || 320;
-  const height = 400; // tall enough for bottom label
+  const height = 320; // tall enough for bottom label
   const centerX = width / 2;
   const centerY = height / 2 - 15; // shift up slightly
-  const radius = width * 0.38;
+  const radius = width * 0.28;
 
   const domains = domainSummary.map(d => {
     const full = d.domainLabel || '';
@@ -85,7 +85,7 @@ function drawRadarChart(canvasId, domainSummary, canvasWidth) {
   });
 
   // Labels - keep within canvas bounds
-  const labelRadius = radius + 22;
+  const labelRadius = radius + 24;
   const colors = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4'];
   domains.forEach((label, i) => {
     const angle = i * angleStep - Math.PI / 2;
