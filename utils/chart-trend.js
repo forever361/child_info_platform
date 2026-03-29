@@ -29,10 +29,10 @@ function drawTrendChart(canvasId, observations, canvasWidth) {
   if (!canvasId || !observations || !observations.length) return;
   const ctx = wx.createCanvasContext(canvasId);
   const width = canvasWidth || 340;
-  const height = 220;
+  const height = 310;
   const padLeft = 38;
   const padRight = 15;
-  const padTop = 15;
+  const padTop = 30;
   const padBottom = 30;
   const chartW = width - padLeft - padRight;
   const chartH = height - padTop - padBottom;
