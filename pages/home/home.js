@@ -21,6 +21,8 @@ Page({
     loading: false,
     noMore: false,
     user: null,
+    openid: '',
+    openidMask: '',
     searchName: '',
     recordType: '',
     classFilterIndex: 0,
@@ -30,7 +32,8 @@ Page({
   onLoad() {
     const user = wx.getStorageSync('user');
     const openid = wx.getStorageSync('openid') || '';
-    this.setData({ user, openid });
+    const openidMask = openid ? '*' + openid.slice(-4) : '';
+    this.setData({ user, openid, openidMask });
     this.fetchList();
   },
 
