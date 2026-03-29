@@ -10,21 +10,22 @@ Page({
     }
   },
 
-  handleWxLogin() {
+  onGetUserInfo(e) {
+    if (this.data.loading) return;
+
+    const userInfo = e.detail.userInfo;
+    if (!userInfo) {
+      // 用户拒绝授权
+      wx.showToast({ title: '需要授权才能登录', icon: 'none' });
+      return;
+    }
+
     this.setData({ loading: true });
 
     wx.login({
       success: (res) => {
         if (res.code) {
-          wx.getUserProfile({
-            desc: '用于完善用户资料',
-            success: (profileRes) => {
-              this.doLogin(res.code, profileRes.userInfo);
-            },
-            fail: () => {
-              this.doLogin(res.code, { nickName: '教师' });
-            }
-          });
+          this.doLogin(res.code, userInfo);
         } else {
           wx.showToast({ title: '登录失败', icon: 'none' });
           this.setData({ loading: false });
@@ -55,8 +56,8 @@ Page({
           wx.setStorageSync('user', res.data.user);
           wx.showToast({ title: '登录成功', icon: 'success' });
           setTimeout(() => {
-          wx.navigateTo({ url: '/pages/home/home' });
-        }, 1000);
+            wx.navigateTo({ url: '/pages/home/home' });
+          }, 1000);
         } else {
           wx.showToast({ title: res.data.error || '登录失败', icon: 'none' });
         }

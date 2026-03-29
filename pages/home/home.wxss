@@ -11,8 +11,37 @@
 
 .user-info {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 24rpx;
+}
+
+.avatar-box {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255,255,255,0.3);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.2);
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+}
+
+.avatar-text {
+  font-size: 40rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
 }
 
 .user-info .name {
@@ -26,6 +55,7 @@
   background: rgba(255,255,255,0.2);
   padding: 8rpx 20rpx;
   border-radius: 20rpx;
+  width: fit-content;
 }
 
 .logout {

@@ -2,8 +2,14 @@
   <!-- 头部 -->
   <view class="header">
     <view class="user-info">
-      <text class="name">{{user.name}}</text>
-      <text class="role">{{user.role === 'admin' ? '园长' : '教师'}}</text>
+      <view class="avatar-box">
+        <image wx:if="{{user.avatar}}" class="avatar" src="{{user.avatar}}" mode="aspectFill" />
+        <text wx:else class="avatar-text">{{user.name ? user.name[0] : '?'}}</text>
+      </view>
+      <view class="user-detail">
+        <text class="name">{{user.name || '用户'}}</text>
+        <text class="role">{{user.role === 'admin' ? '园长' : '教师'}}</text>
+      </view>
     </view>
     <view class="logout" bindtap="logout">退出</view>
   </view>
