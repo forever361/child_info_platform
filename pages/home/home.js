@@ -1,5 +1,18 @@
 const api = require('../../utils/api.js');
 
+const formatDate = (dateStr) => {
+  if (!dateStr) return '';
+  try {
+    // 数据库存的是北京时间，JS默认当UTC解析，需要加8小时
+    const d = new Date(dateStr);
+    d.setHours(d.getHours() + 8);
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  } catch (e) {
+    return dateStr;
+  }
+};
+
 Page({
   data: {
     list: [],
@@ -9,7 +22,9 @@ Page({
     noMore: false,
     user: null,
     searchName: '',
-    recordType: ''
+    recordType: '',
+    classFilterIndex: 0,
+    classFilterList: ['全部班级', '小班1班', '小班2班', '中班1班', '中班2班', '大班1班', '大班2班']
   },
 
   onLoad() {
@@ -35,9 +50,16 @@ Page({
       };
       if (this.data.searchName) params.target_name = this.data.searchName;
       if (this.data.recordType) params.record_type = this.data.recordType;
+      if (this.data.classFilterIndex > 0) {
+        params.class_name = this.data.classFilterList[this.data.classFilterIndex];
+      }
 
       const res = await api.getObservations(params);
-      const newList = this.data.page === 1 ? res.list : [...this.data.list, ...res.list];
+      const newList = (this.data.page === 1 ? res.list : [...this.data.list, ...res.list]).map(item => ({
+        ...item,
+        observation_date: formatDate(item.observation_date),
+        created_at: formatDate(item.created_at)
+      }));
 
       this.setData({
         list: newList,
@@ -59,6 +81,11 @@ Page({
 
   onSearch(e) {
     this.setData({ searchName: e.detail.value, page: 1, list: [], noMore: false });
+    this.fetchList();
+  },
+
+  onClassFilterChange(e) {
+    this.setData({ classFilterIndex: e.detail.value, page: 1, list: [], noMore: false });
     this.fetchList();
   },
 

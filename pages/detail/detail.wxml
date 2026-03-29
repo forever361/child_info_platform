@@ -3,12 +3,17 @@
   <view class="card">
     <view class="header">
       <text class="target">{{observation.target_name}}</text>
-      <text class="type">{{observation.record_type === 'individual' ? '个体' : '事件'}}</text>
+      <text class="type">{{observation.record_type === 'individual' ? '个体' : '事件/小组'}}</text>
     </view>
     <view class="meta">
-      <text>{{observation.user_name}} · {{observation.user_class}}</text>
-      <text>{{observation.created_at}}</text>
+      <text>{{observation.class_name || observation.user_class}} · {{observation.user_name}}</text>
+      <text>{{observation.observation_date}}</text>
     </view>
+  </view>
+
+  <!-- 领域标签 -->
+  <view class="card" wx:if="{{analysisData && analysisData.domainLabel}}">
+    <view class="domain-tag">{{analysisData.domainLabel}}</view>
   </view>
 
   <!-- 观察记录 -->
@@ -17,11 +22,24 @@
     <view class="content">{{observation.content || '暂无'}}</view>
   </view>
 
-  <!-- 行为分析 -->
-  <view class="card">
+  <!-- 行为分析维度评级 -->
+  <view class="card" wx:if="{{analysisData && analysisData.dimensions && analysisData.dimensions.length > 0}}">
     <view class="card-title">行为分析</view>
+    <view class="dimension-display">
+      <view class="dimension-row" wx:for="{{analysisData.dimensions}}" wx:key="name">
+        <text class="dim-name">{{item.name}}</text>
+        <text class="dim-level level-{{item.levelIndex}}">{{item.level}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 综合分析（独立卡片） -->
+  <view class="card">
+    <view class="card-title">综合分析</view>
     <view class="content analysis">{{observation.analysis || '暂无'}}</view>
   </view>
+
+
 
   <!-- 图片 -->
   <view class="card" wx:if="{{observation.images && observation.images.length > 0}}">
@@ -43,20 +61,21 @@
     <view class="card-title">连续观察 ({{linkedList.length}}条)</view>
     <view class="linked-list">
       <view
-        class="linked-item"
+        class="linked-item {{item.isCurrent ? 'current' : ''}}"
         wx:for="{{linkedList}}"
         wx:key="id"
-        bindtap="goDetail"
+        catchtap="goDetail"
         data-id="{{item.id}}"
       >
-        <text class="time">{{item.created_at}}</text>
-        <text class="arrow">></text>
+        <text class="time">{{item.observation_date}}</text>
+        <text class="arrow">{{item.isCurrent ? '当前' : '>'}}</text>
       </view>
     </view>
   </view>
 
   <!-- 操作按钮 -->
   <view class="actions">
+    <button type="primary" bindtap="generateReport">一键生成成长报告</button>
     <button type="default" bindtap="continueObserve">继续观察</button>
     <button type="default" bindtap="goEdit">编辑</button>
     <button type="warn" bindtap="handleDelete">删除</button>

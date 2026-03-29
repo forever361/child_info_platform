@@ -98,8 +98,14 @@ export const deleteObservation = (id) => request({ url: `/observations/${id}`, m
 export const exportExcel = (params) => request({ url: '/export/excel', method: 'POST', data: params });
 export const exportWord = (params) => request({ url: '/export/word', method: 'POST', data: params });
 
+export const generateReport = (targetName, className) => request({
+  url: '/report/generate',
+  method: 'GET',
+  data: { target_name: targetName, class_name: className }
+});
+
 export default {
   login, getUserInfo, getObservations, getObservation,
   getLinkedObservations, createObservation, updateObservation,
-  deleteObservation, exportExcel, exportWord, uploadImage
+  deleteObservation, exportExcel, exportWord, uploadImage, generateReport
 };

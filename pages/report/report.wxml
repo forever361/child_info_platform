@@ -1,0 +1,107 @@
+<view class="container" wx:if="{{!loading && reportData}}">
+  <!-- 顶部信息栏 -->
+  <view class="header-card">
+    <view class="child-info">
+      <text class="child-name">{{reportData.childName}}</text>
+      <text class="class-name">{{reportData.className}}</text>
+    </view>
+    <view class="meta-row">
+      <view class="meta-item">
+        <text class="meta-label">观察周期</text>
+        <text class="meta-value">{{reportData.dateRange.start}} ~ {{reportData.dateRange.end}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">记录次数</text>
+        <text class="meta-value accent">{{reportData.observationCount}}次</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">生成时间</text>
+        <text class="meta-value">{{genTime}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 雷达图卡片 -->
+  <view class="card radar-card">
+    <view class="card-title">领域综合评级</view>
+    <canvas canvas-id="radarChart" class="radar-canvas" style="width:320px;height:400px"></canvas>
+  </view>
+
+  <!-- 趋势曲线卡片 -->
+  <view class="card trend-card" wx:if="{{reportData.observations.length > 1}}">
+    <view class="card-title">发展进步趋势</view>
+    <canvas canvas-id="trendChart" class="trend-canvas" style="width:340px;height:220px" wx:if="{{reportData.observations.length > 1 && reportData.dateRange.start !== reportData.dateRange.end}}"></canvas>
+    <view class="trend-empty" wx:if="{{reportData.observations.length > 1 && reportData.dateRange.start === reportData.dateRange.end}}">
+      <text>暂无趋势数据（观察记录不足）</text>
+    </view>
+  </view>
+
+  <!-- 领域卡片 × 6 -->
+  <view class="domain-cards">
+    <view class="domain-card card" wx:for="{{reportData.domainSummary}}" wx:key="domainIndex" data-index="{{item.domainIndex}}">
+      <view class="domain-header">
+        <text class="domain-name">{{item.domainLabel}}</text>
+        <view class="level-badge level-{{levelClass(item.level)}}">{{item.level}}</view>
+      </view>
+      <!-- 维度列表 -->
+      <view class="dimensions">
+        <view class="dim-item" wx:for="{{item.dimensions}}" wx:for-item="dim" wx:key="name">
+          <text class="dim-name">{{dim.name}}</text>
+          <text class="dim-level level-{{levelClass(dim.level)}}">{{dim.level}}</text>
+        </view>
+      </view>
+      <!-- AI评语 -->
+      <view class="ai-comment" wx:if="{{item.aiComment}}">
+        <text class="ai-comment-text">{{item.aiComment}}</text>
+      </view>
+      <!-- 家庭建议 -->
+      <view class="family-tip" wx:if="{{item.familyTip}}">
+        <text class="tip-label">家庭指导建议</text>
+        <text class="tip-text">{{item.familyTip}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 综合评语卡片 -->
+  <view class="card overall-card">
+    <view class="card-title">综合评语</view>
+    <view class="overall-text">{{reportData.overallComment}}</view>
+  </view>
+
+  <!-- 进步趋势卡片 -->
+  <view class="card progress-card" wx:if="{{reportData.progressTrend}}">
+    <view class="card-title">进步趋势</view>
+    <view class="progress-text">{{reportData.progressTrend}}</view>
+  </view>
+
+  <!-- 家园共育建议 -->
+  <view class="card home-card">
+    <view class="card-title">家园共育建议</view>
+    <view class="tips-list">
+      <view class="tip-item" wx:for="{{homeTips}}" wx:key="index">
+        <text class="tip-num">{{index + 1}}</text>
+        <text class="tip-content">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-actions">
+    <button class="btn-share" open-type="share">分享报告</button>
+    <button class="btn-save" bindtap="saveReport">保存报告</button>
+  </view>
+</view>
+
+<!-- 加载状态 -->
+<view class="loading-view" wx:if="{{loading}}">
+  <view class="loading-icon"></view>
+  <text class="loading-text">正在生成报告，请稍候...</text>
+  <text class="loading-sub" wx:if="{{loadingStep}}">{{loadingStep}}</text>
+</view>
+
+<!-- 错误状态 -->
+<view class="error-view" wx:if="{{error && !loading}}">
+  <text class="error-icon">⚠️</text>
+  <text class="error-text">{{error}}</text>
+  <button class="btn-retry" bindtap="retryLoad">重新加载</button>
+</view>

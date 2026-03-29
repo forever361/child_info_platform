@@ -41,19 +41,63 @@ Page({
       obs.images = (images || []).map(img => 
         img.startsWith('http') ? img : IMAGE_BASE + img
       );
-      
-      this.setData({ observation: obs });
+
+      // 解析分析数据
+      let analysisData = null;
+      if (obs.analysis_data) {
+        try {
+          analysisData = JSON.parse(obs.analysis_data);
+          // 补充 levelIndex 用于样式
+          if (analysisData.dimensions) {
+            const levelMap = { '优秀': 0, '良好': 1, '一般': 2, '需关注': 3 };
+            analysisData.dimensions = analysisData.dimensions.map(d => ({
+              ...d,
+              levelIndex: levelMap[d.level] !== undefined ? levelMap[d.level] : 0
+            }));
+          }
+        } catch (e) {}
+      }
+
+      // 格式化时间（数据库是北京时间，JS默认当UTC所以+8）
+      if (obs.observation_date) {
+        const d = new Date(obs.observation_date);
+        d.setHours(d.getHours() + 8);
+        const pad = n => String(n).padStart(2, '0');
+        obs.observation_date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      }
+
+      this.setData({ observation: obs, analysisData });
 
       // 加载连续观察记录
       if (obs.linked_id) {
         const linkedRes = await api.getLinkedObservations(obs.linked_id);
-        this.setData({ linkedList: linkedRes.observations });
+        const pad = n => String(n).padStart(2, '0');
+        const linkedList = (linkedRes.observations || []).map(item => {
+          if (item.observation_date) {
+            try {
+              const d = new Date(item.observation_date);
+              d.setHours(d.getHours() + 8);
+              item.observation_date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+            } catch(e) {}
+          }
+          item.isCurrent = item.id === obs.id;
+          return item;
+        });
+        this.setData({ linkedList });
       }
     } catch (err) {
       wx.showToast({ title: err.message, icon: 'none' });
     } finally {
       this.setData({ loading: false });
     }
+  },
+
+  // 查看详情
+  goDetail(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/detail/detail?id=${id}`
+    });
   },
 
   // 编辑
@@ -63,10 +107,19 @@ Page({
     });
   },
 
-  // 继续观察（创建连续记录）
-  continueObserve() {
+  // 一键生成成长报告
+  generateReport() {
+    const obs = this.data.observation;
     wx.navigateTo({
-      url: `/pages/record/record?linkedId=${this.data.observation.linked_id}`
+      url: `/pages/report/report?target_name=${encodeURIComponent(obs.target_name)}&class_name=${encodeURIComponent(obs.class_name || obs.user_class)}`
+    });
+  },
+
+  // 继续观察（创建连续记录，复用对象名和班级）
+  continueObserve() {
+    const obs = this.data.observation;
+    wx.navigateTo({
+      url: `/pages/record/record?linkedId=${obs.linked_id}&targetName=${encodeURIComponent(obs.target_name)}&className=${encodeURIComponent(obs.class_name)}`
     });
   },
 

@@ -19,8 +19,13 @@
     <view class="search-input">
       <input placeholder="搜索幼儿姓名/事件" bindconfirm="onSearch" />
     </view>
+    <picker bindchange="onClassFilterChange" value="{{classFilterIndex}}" range="{{classFilterList}}">
+      <view class="filter-picker">
+        {{classFilterList[classFilterIndex] || '全部班级'}}
+      </view>
+    </picker>
     <picker bindchange="onTypeChange" value="{{recordType}}" range="{{[{value:'',label:'全部'},{value:'individual',label:'个体'},{value:'event',label:'事件'}]}}" range-key="label">
-      <view class="type-picker">
+      <view class="filter-picker">
         {{recordType === 'individual' ? '个体' : recordType === 'event' ? '事件' : '全部'}}
       </view>
     </picker>
@@ -37,12 +42,13 @@
       <view class="item-main" bindtap="goDetail" data-id="{{item.id}}">
         <view class="item-header">
           <text class="target-name">{{item.target_name}}</text>
+          <text class="class-name">{{item.class_name}}</text>
           <text class="record-type">{{item.record_type === 'individual' ? '个体' : '事件'}}</text>
         </view>
         <view class="item-content">{{item.content || '暂无内容'}}</view>
         <view class="item-footer">
           <text class="user">{{item.user_name}}</text>
-          <text class="time">{{item.created_at}}</text>
+          <text class="time">{{item.observation_date}}</text>
         </view>
       </view>
       <view class="item-actions">

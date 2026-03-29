@@ -81,7 +81,7 @@
   font-size: 28rpx;
 }
 
-.type-picker {
+.filter-picker {
   background: #f3f4f6;
   padding: 20rpx 24rpx;
   border-radius: 12rpx;
@@ -139,6 +139,14 @@
   font-size: 22rpx;
   color: #4f46e5;
   background: #eef2ff;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+.class-name {
+  font-size: 22rpx;
+  color: #10b981;
+  background: #d1fae5;
   padding: 6rpx 16rpx;
   border-radius: 8rpx;
 }

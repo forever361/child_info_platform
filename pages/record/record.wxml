@@ -23,8 +23,51 @@
     </view>
 
     <view class="form-item">
-      <text class="label">观察记录</text>
-      <textarea class="textarea" placeholder="请记录幼儿的行为表现..." value="{{content}}" data-field="content" bindinput="onInput" />
+      <text class="label">观察时间</text>
+      <picker mode="multiSelector" bindchange="onDateChange" value="{{dateIndex}}" range="{{dateList}}">
+        <view class="picker">
+          {{observationDateStr || '请选择观察时间'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 学习与发展领域 -->
+    <view class="form-item">
+      <text class="label">领域 <text class="required">*</text></text>
+      <picker bindchange="onDomainChange" value="{{domainIndex}}" range="{{domainList}}">
+        <view class="picker">
+          {{domainList[domainIndex] || '请选择领域'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 行为分析维度（根据所选领域动态显示） -->
+    <view class="analysis-section" wx:if="{{domainIndex > 0}}">
+      <view class="section-title">{{domainLabels[domainIndex]}}</view>
+
+      <!-- 维度评级列表 -->
+      <view class="dimension-list">
+        <view class="dimension-item" wx:for="{{currentDimensions}}" wx:key="name">
+          <view class="dimension-name">{{item.name}}</view>
+          <view class="dimension-desc">{{item.desc}}</view>
+          <picker bindchange="onDimensionChange" data-index="{{index}}" value="{{item.levelIndex}}" range="{{levelList}}">
+            <view class="level-picker">
+              {{levelList[item.levelIndex] || '请选择等级'}}
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 综合分析 -->
+      <view class="analysis-textarea-wrap">
+        <text class="analysis-label">综合分析</text>
+        <textarea class="textarea analysis-textarea" placeholder="可手动输入分析内容，或从豆包复制分析结果粘贴于此" value="{{analysis}}" data-field="analysis" bindinput="onInput" />
+      </view>
+    </view>
+
+    <view class="form-item" wx:if="{{domainIndex === 0}}">
+      <text class="label">行为分析</text>
+      <textarea class="textarea" placeholder="可手动输入分析内容，或从豆包复制分析结果粘贴于此" value="{{analysis}}" data-field="analysis" bindinput="onInput" />
     </view>
 
     <view class="form-item">
@@ -40,11 +83,6 @@
           <text>+</text>
         </view>
       </view>
-    </view>
-
-    <view class="form-item">
-      <text class="label">行为分析</text>
-      <textarea class="textarea" placeholder="可手动输入分析内容，或从豆包复制分析结果粘贴于此" value="{{analysis}}" data-field="analysis" bindinput="onInput" />
     </view>
   </view>
 

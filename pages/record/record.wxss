@@ -129,3 +129,75 @@
   font-size: 32rpx;
   border: none;
 }
+
+.analysis-section {
+  padding: 0 32rpx 32rpx;
+  background: #fff;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #7c3aed;
+  padding: 32rpx 0 24rpx;
+  border-bottom: 2rpx solid #f3f4f6;
+  margin-bottom: 24rpx;
+}
+
+.dimension-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.dimension-item {
+  background: #f9fafb;
+  padding: 24rpx;
+  border-radius: 12rpx;
+}
+
+.dimension-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8rpx;
+}
+
+.dimension-desc {
+  font-size: 24rpx;
+  color: #9ca3af;
+  margin-bottom: 16rpx;
+}
+
+.level-picker {
+  font-size: 28rpx;
+  background: #fff;
+  padding: 16rpx 20rpx;
+  border-radius: 10rpx;
+  border: 2rpx solid #e5e7eb;
+  color: #374151;
+}
+
+.analysis-textarea-wrap {
+  margin-top: 32rpx;
+}
+
+.analysis-label {
+  display: block;
+  font-size: 28rpx;
+  color: #374151;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+
+.analysis-textarea {
+  width: 100%;
+  height: 200rpx;
+  background: #f9fafb;
+  padding: 24rpx;
+  border-radius: 12rpx;
+  border: 2rpx solid #f3f4f6;
+  box-sizing: border-box;
+  font-size: 28rpx;
+}

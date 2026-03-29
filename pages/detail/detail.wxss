@@ -32,6 +32,64 @@
   border-radius: 8rpx;
 }
 
+.domain-tag {
+  display: inline-block;
+  font-size: 24rpx;
+  color: #7c3aed;
+  background: #f3e8ff;
+  padding: 10rpx 24rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.dimension-display {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.dimension-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 20rpx;
+  background: #f9fafb;
+  border-radius: 10rpx;
+}
+
+.dim-name {
+  font-size: 28rpx;
+  color: #374151;
+}
+
+.dim-level {
+  font-size: 24rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 8rpx;
+  font-weight: 500;
+}
+
+.level-0 {
+  color: #059669;
+  background: #d1fae5;
+}
+
+.level-1 {
+  color: #2563eb;
+  background: #dbeafe;
+}
+
+.level-2 {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.level-3 {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
 .meta {
   display: flex;
   justify-content: space-between;
@@ -85,6 +143,13 @@
   padding: 20rpx;
   background: #f9fafb;
   border-radius: 10rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.linked-item.current {
+  background: #eef2ff;
+  border: 2rpx solid #4f46e5;
 }
 
 .linked-item .time {
