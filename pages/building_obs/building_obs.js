@@ -472,23 +472,23 @@ Page({
       wx.hideLoading();
       if (res.success && res.file) {
         wx.showToast({ title: '导出成功', icon: 'success' });
-        // 打开文件
-        wx.openDocument({
-          filePath: res.file,
-          success: () => {},
-          fail: (e) => {
-            // 如果openDocument失败，尝试下载
-            wx.downloadFile({
-              url: 'https://aixint.cn' + res.file,
-              success: (dl) => {
+        wx.downloadFile({
+          url: 'https://aixint.cn' + res.file,
+          success: (dl) => {
+            wx.saveFile({
+              tempFilePath: dl.tempFilePath,
+              success: (saveRes) => {
                 wx.openDocument({
-                  filePath: dl.tempFilePath,
+                  filePath: saveRes.savedFilePath,
                   showMenu: true,
-                  fail: () => wx.showToast({ title: '请在文件夹中查看', icon: 'none' })
+                  success: () => {},
+                  fail: () => wx.showToast({ title: '文件已保存，可在文件夹中查看', icon: 'none' })
                 });
-              }
+              },
+              fail: () => wx.showToast({ title: '保存失败', icon: 'none' })
             });
-          }
+          },
+          fail: () => wx.showToast({ title: '下载失败', icon: 'none' })
         });
       } else {
         wx.showToast({ title: res.error || '导出失败', icon: 'none' });

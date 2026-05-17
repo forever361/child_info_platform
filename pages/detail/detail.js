@@ -151,10 +151,21 @@ Page({
           wx.downloadFile({
             url: 'https://aixint.cn' + res.data.file,
             success: (dl) => {
-              wx.openDocument({
-                filePath: dl.tempFilePath,
-                showMenu: true,
-                fail: () => wx.showToast({ title: '请在文件夹中查看', icon: 'none' })
+              // 先保存到本地，再打开
+              wx.saveFile({
+                tempFilePath: dl.tempFilePath,
+                success: (saveRes) => {
+                  wx.openDocument({
+                    filePath: saveRes.savedFilePath,
+                    showMenu: true,
+                    success: () => {},
+                    fail: (e) => {
+                      console.error('openDocument error', e);
+                      wx.showToast({ title: '文件已保存，可从文件夹查看', icon: 'none' });
+                    }
+                  });
+                },
+                fail: () => wx.showToast({ title: '保存失败', icon: 'none' })
               });
             },
             fail: () => wx.showToast({ title: '下载失败', icon: 'none' })
