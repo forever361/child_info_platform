@@ -146,10 +146,13 @@ Page({
       header: { Authorization: `Bearer ${token}` },
       success: (res) => {
         wx.hideLoading();
+        console.log('export response:', JSON.stringify(res.data));
         if (res.statusCode === 200 && res.data.success) {
           wx.showToast({ title: '导出成功', icon: 'success' });
           wx.downloadFile({
             url: 'https://aixint.cn' + res.data.file,
+            success: (dl) => {
+              console.log('downloadFile tempFilePath:', dl.tempFilePath, dl.statusCode);
             success: (dl) => {
               // 先保存到本地，再打开
               wx.saveFile({
