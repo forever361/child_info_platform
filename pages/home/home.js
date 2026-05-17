@@ -106,6 +106,10 @@ Page({
     wx.navigateTo({ url: '/pages/record/record' });
   },
 
+  goBuildingObs() {
+    wx.navigateTo({ url: '/pages/building_obs/building_obs' });
+  },
+
   handleDelete(e) {
     const { id } = e.currentTarget.dataset;
     wx.showModal({

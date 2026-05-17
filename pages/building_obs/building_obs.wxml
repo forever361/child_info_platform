@@ -1,0 +1,184 @@
+<view class="container">
+  <!-- 头部信息 -->
+  <view class="header-info">
+    <view class="header-row">
+      <text class="label">教师：</text>
+      <text class="value">{{userName}}</text>
+    </view>
+    <view class="header-row">
+      <text class="label">日期：</text>
+      <picker mode="date" value="{{obsDate}}" bindchange="onDateChange">
+        <text class="picker-value">{{obsDate}}</text>
+      </picker>
+    </view>
+    <view class="header-row">
+      <text class="label">班级：</text>
+      <picker bindchange="onClassChange" value="{{classIndex}}" range="{{classList}}">
+        <text class="picker-value">{{classList[classIndex]}}</text>
+      </picker>
+    </view>
+    <view class="header-row">
+      <text class="label">观察对象：</text>
+      <input class="input-field" placeholder="请输入幼儿姓名（可多个，用逗号分隔）" value="{{targetName}}" bindinput="onInput" data-field="targetName" />
+    </view>
+    <view class="header-row">
+      <text class="label">游戏类型：</text>
+      <picker bindchange="onGameTypeChange" value="{{gameTypeIndex}}" range="{{gameTypeList}}">
+        <text class="picker-value">{{gameTypeList[gameTypeIndex]}}</text>
+      </picker>
+    </view>
+    <view class="header-row">
+      <text class="label">年龄班：</text>
+      <picker bindchange="onLevelChange" value="{{levelIndex}}" range="{{levelList}}">
+        <text class="picker-value">{{levelList[levelIndex]}}</text>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 板块1：观察与解读 -->
+  <view class="section">
+    <view class="section-title">一、观察与解读</view>
+
+    <!-- 六大观察项目 -->
+    <view class="obs-item" wx:for="{{obsItems}}" wx:key="index">
+      <view class="obs-item-title">{{item.num}}.{{item.title}}</view>
+      <view class="obs-options">
+        <checkbox-group bindchange="onObsCheck" data-index="{{index}}">
+          <label class="checkbox-item" wx:for="{{item.options}}" wx:for-item="opt" wx:for-index="optIdx" wx:key="optIdx">
+            <checkbox value="{{optIdx}}" checked="{{item.selected[optIdx]}}" />
+            <text class="checkbox-text">{{opt}}</text>
+          </label>
+        </checkbox-group>
+      </view>
+    </view>
+
+    <!-- 三个图片插槽 -->
+    <view class="photo-slots">
+      <view class="slot-header">典型图片记录</view>
+      <view class="photo-slot" wx:for="{{photoSlots}}" wx:key="index">
+        <view class="slot-title">环节{{index + 1}}</view>
+        <view class="photo-area">
+          <view class="photo-grid" wx:if="{{item.images.length > 0}}">
+            <view class="photo-item" wx:for="{{item.images}}" wx:for-item="img" wx:for-index="imgIdx" wx:key="imgIdx">
+              <image class="photo-img" src="{{img}}" mode="aspectFill" bindtap="previewImage" data-slot="{{index}}" data-img="{{imgIdx}}" />
+              <view class="photo-remove" bindtap="removePhoto" data-slot="{{index}}" data-img="{{imgIdx}}">×</view>
+            </view>
+          </view>
+          <view class="add-photo-btn" bindtap="addPhoto" data-slot="{{index}}">
+            <text>+</text>
+            <text>添加照片</text>
+          </view>
+        </view>
+        <view class="slot-inputs">
+          <view class="input-group">
+            <text class="input-label">客观描述：</text>
+            <textarea class="textarea-field" placeholder="描述幼儿的行为表现" value="{{item.description}}" bindinput="onSlotInput" data-slot="{{index}}" data-field="description" />
+          </view>
+          <view class="input-group">
+            <text class="input-label">行为解读：</text>
+            <textarea class="textarea-field" placeholder="分析幼儿行为背后的意义（请注明幼儿姓名）" value="{{item.analysis}}" bindinput="onSlotInput" data-slot="{{index}}" data-field="analysis" />
+          </view>
+          <view class="voice-btn" bindtap="addVoice" data-slot="{{index}}">
+            <text>🎤</text>
+            <text>{{item.voicePath ? '重新录音' : '添加语音'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 板块2：介入与指导 -->
+  <view class="section">
+    <view class="section-title">二、介入与指导</view>
+
+    <view class="obs-item">
+      <view class="obs-item-title">1. 我是否做到"不急于介入游戏"，在幼儿确实需要时才介入：</view>
+      <view class="obs-options">
+        <checkbox-group bindchange="onInterveneCheck">
+          <label class="checkbox-item" wx:for="{{interveneOptions}}" wx:key="index">
+            <checkbox value="{{index}}" checked="{{interveneSelected[index]}}" />
+            <text class="checkbox-text">{{item}}</text>
+          </label>
+        </checkbox-group>
+      </view>
+    </view>
+
+    <view class="obs-item">
+      <view class="obs-item-title">2. 我采用的指导策略是（可多选）：</view>
+      <view class="obs-options strategy-options">
+        <checkbox-group bindchange="onStrategyCheck">
+          <label class="checkbox-item" wx:for="{{strategyOptions}}" wx:key="index">
+            <checkbox value="{{index}}" checked="{{strategySelected[index]}}" />
+            <text class="checkbox-text">{{item}}</text>
+          </label>
+        </checkbox-group>
+      </view>
+    </view>
+
+    <view class="obs-item">
+      <view class="obs-item-title">3. 介入的有效性：</view>
+      <view class="obs-options">
+        <radio-group bindchange="onEffectivenessChange">
+          <label class="radio-item" wx:for="{{effectivenessOptions}}" wx:key="index">
+            <radio value="{{index}}" checked="{{effectivenessIndex === index}}" />
+            <text class="checkbox-text">{{item}}</text>
+          </label>
+        </radio-group>
+      </view>
+    </view>
+
+    <view class="input-group">
+      <text class="input-label">请简要记录选择指导策略的原因（关键词）：</text>
+      <textarea class="textarea-field" placeholder="记录原因..." value="{{strategyReason}}" bindinput="onInput" data-field="strategyReason" />
+    </view>
+  </view>
+
+  <!-- 板块3：回顾与分享 -->
+  <view class="section">
+    <view class="section-title">三、回顾与分享</view>
+
+    <view class="obs-options">
+      <checkbox-group bindchange="onShareCheck">
+        <label class="checkbox-item" wx:for="{{shareOptions}}" wx:key="index">
+          <checkbox value="{{index}}" checked="{{shareSelected[index]}}" />
+          <text class="checkbox-text">{{item}}</text>
+        </label>
+      </checkbox-group>
+    </view>
+
+    <view class="input-group">
+      <text class="input-label">请简要记录1-2名幼儿的精彩表达/提问：</text>
+      <textarea class="textarea-field" placeholder="记录幼儿的精彩表达..." value="{{shareRecord}}" bindinput="onInput" data-field="shareRecord" />
+    </view>
+  </view>
+
+  <!-- 板块4：后续计划 -->
+  <view class="section">
+    <view class="section-title">四、后续计划</view>
+
+    <view class="obs-options">
+      <checkbox-group bindchange="onPlanCheck">
+        <label class="checkbox-item" wx:for="{{planOptions}}" wx:key="index">
+          <checkbox value="{{index}}" checked="{{planSelected[index]}}" />
+          <text class="checkbox-text">{{item}}</text>
+        </label>
+      </checkbox-group>
+    </view>
+
+    <view class="input-group">
+      <text class="input-label">其他计划：</text>
+      <textarea class="textarea-field" placeholder="其他计划..." value="{{otherPlan}}" bindinput="onInput" data-field="otherPlan" />
+    </view>
+
+    <view class="input-group">
+      <text class="input-label">自我反思小结：</text>
+      <textarea class="textarea-field tall" placeholder="总结本次观察与指导的反思..." value="{{summary}}" bindinput="onInput" data-field="summary" />
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-bar">
+    <button class="submit-btn" bindtap="handleSave" loading="{{loading}}">保存记录</button>
+    <button class="export-btn" bindtap="handleExport">导出表格</button>
+  </view>
+</view>

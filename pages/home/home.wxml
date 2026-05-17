@@ -66,7 +66,12 @@
   </scroll-view>
 
   <!-- 新建按钮 -->
-  <view class="add-btn" bindtap="goRecord">
-    <text>+</text>
+  <view class="add-btns">
+    <view class="add-btn main" bindtap="goRecord">
+      <text>+</text>
+    </view>
+    <view class="add-btn sub" bindtap="goBuildingObs">
+      <text>🏗️</text>
+    </view>
   </view>
 </view>
