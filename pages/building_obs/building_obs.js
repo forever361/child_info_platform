@@ -274,20 +274,7 @@ Page({
     this.setData({ photoSlots });
   },
 
-  // 语音录制
-  addVoice(e) {
-    const slotIndex = e.currentTarget.dataset.slot;
-    wx.chooseMessageFile({
-      count: 1,
-      type: 'file',
-      success: (res) => {
-        const voicePath = res.tempFiles[0].path;
-        const photoSlots = [...this.data.photoSlots];
-        photoSlots[slotIndex].voicePath = voicePath;
-        this.setData({ photoSlots });
-      }
-    });
-  },
+
 
   async loadData(id) {
     try {

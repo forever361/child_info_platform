@@ -78,10 +78,7 @@
             <text class="input-label">行为解读：</text>
             <textarea class="textarea-field" placeholder="分析幼儿行为背后的意义（请注明幼儿姓名）" value="{{item.analysis}}" bindinput="onSlotInput" data-slot="{{index}}" data-field="analysis" />
           </view>
-          <view class="voice-btn" bindtap="addVoice" data-slot="{{index}}">
-            <text>🎤</text>
-            <text>{{item.voicePath ? '重新录音' : '添加语音'}}</text>
-          </view>
+
         </view>
       </view>
     </view>
