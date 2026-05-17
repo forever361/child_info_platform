@@ -66,12 +66,35 @@
   </scroll-view>
 
   <!-- 新建按钮 -->
-  <view class="add-btns">
-    <view class="add-btn main" bindtap="goRecord">
-      <text>+</text>
-    </view>
-    <view class="add-btn sub" bindtap="goBuildingObs">
-      <text>🏗️</text>
+  <view class="add-btn" bindtap="showAddMenu">
+    <text>+</text>
+  </view>
+
+  <!-- 新增类型选择弹窗 -->
+  <view class="add-menu-mask" wx:if="{{showAddMenu}}" bindtap="hideAddMenu">
+    <view class="add-menu" catchtap="">
+      <view class="add-menu-title">选择记录类型</view>
+      <view class="add-menu-item" bindtap="goRecord">
+        <text class="menu-icon">📝</text>
+        <text class="menu-label">通用观察记录</text>
+      </view>
+      <view class="add-menu-item" bindtap="goBuildingObs">
+        <text class="menu-icon">🏗️</text>
+        <text class="menu-label">建构游戏观察</text>
+      </view>
+      <view class="add-menu-item disabled">
+        <text class="menu-icon">🎭</text>
+        <text class="menu-label">角色游戏观察（待开发）</text>
+      </view>
+      <view class="add-menu-item disabled">
+        <text class="menu-icon">🎨</text>
+        <text class="menu-label">艺术创作观察（待开发）</text>
+      </view>
+      <view class="add-menu-item disabled">
+        <text class="menu-icon">🏖️</text>
+        <text class="menu-label">沙水游戏观察（待开发）</text>
+      </view>
+      <view class="add-menu-cancel" bindtap="hideAddMenu">取消</view>
     </view>
   </view>
 </view>

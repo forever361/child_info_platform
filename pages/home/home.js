@@ -103,11 +103,21 @@ Page({
   },
 
   goRecord() {
+    this.hideAddMenu();
     wx.navigateTo({ url: '/pages/record/record' });
   },
 
   goBuildingObs() {
+    this.hideAddMenu();
     wx.navigateTo({ url: '/pages/building_obs/building_obs' });
+  },
+
+  showAddMenu() {
+    this.setData({ showAddMenu: true });
+  },
+
+  hideAddMenu() {
+    this.setData({ showAddMenu: false });
   },
 
   handleDelete(e) {
