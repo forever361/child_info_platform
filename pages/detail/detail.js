@@ -63,6 +63,16 @@ Page({
       if (obs.record_type === 'building_obs' && obs.obs_data) {
         try {
           buildingObsData = JSON.parse(obs.obs_data);
+          // 图片URL需要完整路径
+          const IMAGE_BASE = 'https://aixint.cn';
+          if (buildingObsData.photoSlots) {
+            buildingObsData.photoSlots = buildingObsData.photoSlots.map(slot => ({
+              ...slot,
+              images: (slot.images || []).map(img =>
+                img.startsWith('http') ? img : IMAGE_BASE + img
+              )
+            }));
+          }
         } catch (e) {}
       }
 

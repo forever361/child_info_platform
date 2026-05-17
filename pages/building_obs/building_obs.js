@@ -300,14 +300,84 @@ Page({
         obsData = JSON.parse(obs.obs_data || '{}');
       } catch (e) {}
 
+      // 游戏类型
+      const gameTypeIndex = this.data.gameTypeList.indexOf(obsData.gameType || '');
+      // 年龄班
+      const levelIndex = this.data.levelList.indexOf(obsData.level || '小班');
+      // 班级
+      const classIndex = this.data.classList.indexOf(obs.class_name || '');
+      // 日期
+      const obsDate = obs.observation_date ? obs.observation_date.slice(0, 10) : this.data.obsDate;
+
+      // 观察项目（用已保存的selected状态）
+      let obsItems = JSON.parse(JSON.stringify(OBS_ITEMS_XIAOBAN));
+      if (obsData.obsItems && obsData.obsItems.length > 0) {
+        obsData.obsItems.forEach((saved, i) => {
+          if (obsItems[i] && saved.selected) {
+            obsItems[i].selected = saved.selected;
+          }
+        });
+      }
+
+      // 介入选择
+      let interveneSelected = [false, false, false, false, false];
+      if (obsData.interveneSelected) {
+        interveneSelected = obsData.interveneSelected;
+      }
+
+      // 策略选择
+      let strategySelected = [false, false, false, false, false, false, false];
+      if (obsData.strategySelected) {
+        strategySelected = obsData.strategySelected;
+      }
+
+      // 有效性
+      let effectivenessIndex = -1;
+      if (obsData.effectivenessIndex !== undefined) {
+        effectivenessIndex = obsData.effectivenessIndex;
+      }
+
+      // 回顾分享
+      let shareSelected = [false, false, false, false];
+      if (obsData.shareSelected) {
+        shareSelected = obsData.shareSelected;
+      }
+
+      // 后续计划
+      let planSelected = [false, false, false, false];
+      if (obsData.planSelected) {
+        planSelected = obsData.planSelected;
+      }
+
+      // 图片插槽（处理图片URL）
+      const IMAGE_BASE = 'https://aixint.cn';
+      let photoSlots = JSON.parse(JSON.stringify(this.data.photoSlots));
+      if (obsData.photoSlots && obsData.photoSlots.length > 0) {
+        photoSlots = obsData.photoSlots.map(slot => ({
+          ...slot,
+          images: (slot.images || []).map(img => 
+            img.startsWith('http') ? img : IMAGE_BASE + img
+          )
+        }));
+      }
+
       this.setData({
         targetName: obs.target_name || '',
-        classIndex: this.data.classList.indexOf(obs.class_name) || 0,
-        obsDate: obs.observation_date ? obs.observation_date.slice(0, 10) : this.data.obsDate,
-        summary: obsData.summary || '',
-        shareRecord: obsData.shareRecord || '',
+        classIndex: classIndex >= 0 ? classIndex : 0,
+        obsDate,
+        gameTypeIndex: gameTypeIndex >= 0 ? gameTypeIndex : 0,
+        levelIndex: levelIndex >= 0 ? levelIndex : 0,
+        obsItems,
+        interveneSelected,
+        strategySelected,
+        effectivenessIndex,
+        shareSelected,
+        planSelected,
         strategyReason: obsData.strategyReason || '',
-        otherPlan: obsData.otherPlan || ''
+        shareRecord: obsData.shareRecord || '',
+        otherPlan: obsData.otherPlan || '',
+        summary: obsData.summary || '',
+        photoSlots
       });
     } catch (err) {
       wx.showToast({ title: '加载失败', icon: 'none' });
