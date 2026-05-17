@@ -58,6 +58,14 @@ Page({
         } catch (e) {}
       }
 
+      // 解析游戏观察数据 (building_obs)
+      let buildingObsData = null;
+      if (obs.record_type === 'building_obs' && obs.obs_data) {
+        try {
+          buildingObsData = JSON.parse(obs.obs_data);
+        } catch (e) {}
+      }
+
       // 格式化时间（数据库是北京时间，JS默认当UTC所以+8）
       if (obs.observation_date) {
         const d = new Date(obs.observation_date);
@@ -66,7 +74,7 @@ Page({
         obs.observation_date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
       }
 
-      this.setData({ observation: obs, analysisData });
+      this.setData({ observation: obs, analysisData, buildingObsData });
 
       // 加载连续观察记录
       if (obs.linked_id) {
@@ -102,9 +110,16 @@ Page({
 
   // 编辑
   goEdit() {
-    wx.navigateTo({
-      url: `/pages/record/record?id=${this.data.observation.id}`
-    });
+    const obs = this.data.observation;
+    if (obs.record_type === 'building_obs') {
+      wx.navigateTo({
+        url: `/pages/building_obs/building_obs?id=${obs.id}`
+      });
+    } else {
+      wx.navigateTo({
+        url: `/pages/record/record?id=${obs.id}`
+      });
+    }
   },
 
   // 一键生成成长报告

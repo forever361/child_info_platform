@@ -3,7 +3,7 @@
   <view class="card">
     <view class="header">
       <text class="target">{{observation.target_name}}</text>
-      <text class="type">{{observation.record_type === 'individual' ? '个体' : '事件/小组'}}</text>
+      <text class="type">{{observation.record_type === 'building_obs' ? '建构游戏' : observation.record_type === 'individual' ? '个体' : '事件/小组'}}</text>
     </view>
     <view class="meta">
       <text>{{observation.class_name || observation.user_class}} · {{observation.user_name}}</text>
@@ -11,19 +11,114 @@
     </view>
   </view>
 
-  <!-- 领域标签 -->
-  <view class="card" wx:if="{{analysisData && analysisData.domainLabel}}">
+  <!-- 建构游戏观察详情 -->
+  <block wx:if="{{observation.record_type === 'building_obs' && buildingObsData}}">
+    <!-- 游戏类型和班级 -->
+    <view class="card">
+      <view class="info-row">
+        <text class="info-label">游戏类型：</text>
+        <text class="info-value">{{buildingObsData.gameType}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">年龄班：</text>
+        <text class="info-value">{{buildingObsData.level}}</text>
+      </view>
+    </view>
+
+    <!-- 一、观察与解读 -->
+    <view class="card">
+      <view class="card-title">一、观察与解读</view>
+      <view class="obs-section" wx:for="{{buildingObsData.obsItems}}" wx:key="index">
+        <view class="obs-title">{{item.num}}.{{item.title}}</view>
+        <view class="obs-checked">
+          <text wx:for="{{item.options}}" wx:for-item="opt" wx:for-index="optIdx" wx:key="optIdx" wx:if="{{item.selected[optIdx]}}">✓ {{opt}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 图片记录 -->
+    <view class="card" wx:if="{{buildingObsData.photoSlots && buildingObsData.photoSlots.length > 0}}">
+      <view class="card-title">典型图片记录</view>
+      <view class="photo-section" wx:for="{{buildingObsData.photoSlots}}" wx:key="index">
+        <view class="slot-label">环节{{index + 1}}</view>
+        <view class="slot-images" wx:if="{{item.images && item.images.length > 0}}">
+          <image wx:for="{{item.images}}" wx:for-item="img" wx:for-index="imgIdx" wx:key="imgIdx" src="{{img}}" mode="aspectFill" bindtap="previewImage" data-url="{{img}}" class="obs-image"/>
+        </view>
+        <view class="slot-desc" wx:if="{{item.description}}">
+          <text class="desc-label">客观描述：</text>
+          <text>{{item.description}}</text>
+        </view>
+        <view class="slot-desc" wx:if="{{item.analysis}}">
+          <text class="desc-label">行为解读：</text>
+          <text>{{item.analysis}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 二、介入与指导 -->
+    <view class="card">
+      <view class="card-title">二、介入与指导</view>
+      <view class="obs-checked" wx:if="{{buildingObsData.interveneSelected}}">
+        <text wx:for="{{buildingObsData.interveneOptions}}" wx:for-item="opt" wx:for-index="optIdx" wx:key="optIdx" wx:if="{{buildingObsData.interveneSelected[optIdx]}}">✓ {{opt}}</text>
+      </view>
+      <view class="obs-checked" wx:if="{{buildingObsData.strategySelected}}">
+        <text class="strategy-label">指导策略：</text>
+        <text wx:for="{{buildingObsData.strategyOptions}}" wx:for-item="opt" wx:for-index="optIdx" wx:key="optIdx" wx:if="{{buildingObsData.strategySelected[optIdx]}}">✓ {{opt}}</text>
+      </view>
+      <view class="obs-checked" wx:if="{{buildingObsData.effectivenessIndex >= 0}}">
+        <text class="desc-label">有效性：</text>
+        <text>{{buildingObsData.effectivenessOptions[buildingObsData.effectivenessIndex]}}</text>
+      </view>
+      <view class="obs-desc" wx:if="{{buildingObsData.strategyReason}}">
+        <text class="desc-label">策略原因：</text>
+        <text>{{buildingObsData.strategyReason}}</text>
+      </view>
+    </view>
+
+    <!-- 三、回顾与分享 -->
+    <view class="card" wx:if="{{buildingObsData.shareSelected}}">
+      <view class="card-title">三、回顾与分享</view>
+      <view class="obs-checked">
+        <text wx:for="{{buildingObsData.shareOptions}}" wx:for-item="opt" wx:for-index="optIdx" wx:key="optIdx" wx:if="{{buildingObsData.shareSelected[optIdx]}}">✓ {{opt}}</text>
+      </view>
+      <view class="obs-desc" wx:if="{{buildingObsData.shareRecord}}">
+        <text class="desc-label">精彩表达：</text>
+        <text>{{buildingObsData.shareRecord}}</text>
+      </view>
+    </view>
+
+    <!-- 四、后续计划 -->
+    <view class="card" wx:if="{{buildingObsData.planSelected}}">
+      <view class="card-title">四、后续计划</view>
+      <view class="obs-checked">
+        <text wx:for="{{buildingObsData.planOptions}}" wx:for-item="opt" wx:for-index="optIdx" wx:key="optIdx" wx:if="{{buildingObsData.planSelected[optIdx]}}">✓ {{opt}}</text>
+      </view>
+      <view class="obs-desc" wx:if="{{buildingObsData.otherPlan}}">
+        <text class="desc-label">其他计划：</text>
+        <text>{{buildingObsData.otherPlan}}</text>
+      </view>
+    </view>
+
+    <!-- 自我反思小结 -->
+    <view class="card" wx:if="{{buildingObsData.summary}}">
+      <view class="card-title">自我反思小结</view>
+      <view class="content">{{buildingObsData.summary}}</view>
+    </view>
+  </block>
+
+  <!-- 领域标签（非建构游戏） -->
+  <view class="card" wx:if="{{analysisData && analysisData.domainLabel && observation.record_type !== 'building_obs'}}">
     <view class="domain-tag">{{analysisData.domainLabel}}</view>
   </view>
 
-  <!-- 观察记录 -->
-  <view class="card">
+  <!-- 观察记录（非建构游戏） -->
+  <view class="card" wx:if="{{observation.record_type !== 'building_obs'}}">
     <view class="card-title">观察记录</view>
     <view class="content">{{observation.content || '暂无'}}</view>
   </view>
 
-  <!-- 行为分析维度评级 -->
-  <view class="card" wx:if="{{analysisData && analysisData.dimensions && analysisData.dimensions.length > 0}}">
+  <!-- 行为分析维度评级（非建构游戏） -->
+  <view class="card" wx:if="{{analysisData && analysisData.dimensions && analysisData.dimensions.length > 0 && observation.record_type !== 'building_obs'}}">
     <view class="card-title">行为分析</view>
     <view class="dimension-display">
       <view class="dimension-row" wx:for="{{analysisData.dimensions}}" wx:key="name">
@@ -33,8 +128,8 @@
     </view>
   </view>
 
-  <!-- 综合分析（独立卡片） -->
-  <view class="card">
+  <!-- 综合分析（非建构游戏） -->
+  <view class="card" wx:if="{{observation.record_type !== 'building_obs'}}">
     <view class="card-title">综合分析</view>
     <view class="content analysis">{{observation.analysis || '暂无'}}</view>
   </view>

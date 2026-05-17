@@ -205,3 +205,107 @@
   height: 50vh;
   color: #9ca3af;
 }
+
+/* 建构游戏观察详情样式 */
+.info-row {
+  display: flex;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  width: 140rpx;
+  color: #666;
+  font-size: 26rpx;
+}
+
+.info-value {
+  flex: 1;
+  color: #333;
+  font-size: 26rpx;
+}
+
+.obs-section {
+  margin-bottom: 24rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.obs-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.obs-title {
+  font-size: 26rpx;
+  color: #333;
+  margin-bottom: 12rpx;
+  line-height: 1.5;
+}
+
+.obs-checked {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.obs-checked text {
+  font-size: 24rpx;
+  color: #059669;
+  line-height: 1.6;
+}
+
+.strategy-label, .desc-label {
+  color: #666;
+  margin-top: 8rpx;
+}
+
+.obs-desc {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #555;
+  line-height: 1.6;
+}
+
+.photo-section {
+  background: #f9f9f9;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.slot-label {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #4A90D9;
+  margin-bottom: 12rpx;
+}
+
+.slot-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.obs-image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 8rpx;
+}
+
+.slot-desc {
+  font-size: 24rpx;
+  color: #555;
+  line-height: 1.6;
+  margin-top: 8rpx;
+}
+
+.slot-desc .desc-label {
+  color: #999;
+}
