@@ -44,9 +44,9 @@
         <view class="item-header">
           <text class="target-name">{{item.target_name}}</text>
           <text class="class-name">{{item.class_name}}</text>
-          <text class="record-type">{{item.record_type === 'individual' ? '个体' : '事件'}}</text>
+          <text class="record-type">{{item.record_type === 'building_obs' ? '建构游戏' : item.record_type === 'individual' ? '个体' : '事件'}}</text>
         </view>
-        <view class="item-content">{{item.content || '暂无内容'}}</view>
+        <view class="item-content">{{item.summary || '暂无内容'}}</view>
         <view class="item-footer">
           <text class="user">{{item.user_name}}</text>
           <text class="time">{{item.observation_date}}</text>

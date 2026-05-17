@@ -58,11 +58,37 @@ Page({
       }
 
       const res = await api.getObservations(params);
-      const newList = (this.data.page === 1 ? res.list : [...this.data.list, ...res.list]).map(item => ({
-        ...item,
-        observation_date: formatDate(item.observation_date),
-        created_at: formatDate(item.created_at)
-      }));
+      const newList = (this.data.page === 1 ? res.list : [...this.data.list, ...res.list]).map(item => {
+        let summary = item.content || '';
+        // building_obs 类型：从 obs_data 生成摘要
+        if (item.record_type === 'building_obs' && item.obs_data) {
+          try {
+            const obsData = JSON.parse(item.obs_data);
+            const checkedCount = (obsData.obsItems || []).reduce((sum, it) => 
+              sum + (it.selected || []).filter(Boolean).length, 0
+            );
+            const hasSummary = obsData.summary && obsData.summary.trim();
+            const descSnippet = (obsData.photoSlots || [])
+              .map(s => s.description)
+              .filter(d => d && d.trim())
+              .map(d => d.trim().slice(0, 30))
+              .join('；');
+            if (hasSummary) {
+              summary = '[反思] ' + obsData.summary.trim().slice(0, 50);
+            } else if (descSnippet) {
+              summary = descSnippet + (descSnippet.length >= 30 ? '…' : '');
+            } else {
+              summary = `[已选${checkedCount}项观察点]`;
+            }
+          } catch (e) {}
+        }
+        return {
+          ...item,
+          observation_date: formatDate(item.observation_date),
+          created_at: formatDate(item.created_at),
+          summary
+        };
+      });
 
       this.setData({
         list: newList,
