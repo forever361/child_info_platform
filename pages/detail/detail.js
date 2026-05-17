@@ -132,7 +132,43 @@ Page({
     }
   },
 
-  // 一键生成成长报告
+  // 导出Word
+  goExportWord() {
+    const obs = this.data.observation;
+    if (obs.record_type !== 'building_obs') {
+      return wx.showToast({ title: '该类型暂不支持导出', icon: 'none' });
+    }
+    wx.showLoading({ title: '正在导出...' });
+    const token = wx.getStorageSync('token');
+    wx.request({
+      url: 'https://aixint.cn/api/export/building-word/' + obs.id,
+      method: 'POST',
+      header: { Authorization: `Bearer ${token}` },
+      success: (res) => {
+        wx.hideLoading();
+        if (res.statusCode === 200 && res.data.success) {
+          wx.showToast({ title: '导出成功', icon: 'success' });
+          wx.downloadFile({
+            url: 'https://aixint.cn' + res.data.file,
+            success: (dl) => {
+              wx.openDocument({
+                filePath: dl.tempFilePath,
+                showMenu: true,
+                fail: () => wx.showToast({ title: '请在文件夹中查看', icon: 'none' })
+              });
+            },
+            fail: () => wx.showToast({ title: '下载失败', icon: 'none' })
+          });
+        } else {
+          wx.showToast({ title: res.data.error || '导出失败', icon: 'none' });
+        }
+      },
+      fail: () => {
+        wx.hideLoading();
+        wx.showToast({ title: '导出失败', icon: 'none' });
+      }
+    });
+  },
   generateReport() {
     const obs = this.data.observation;
     wx.navigateTo({
