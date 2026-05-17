@@ -146,7 +146,6 @@ Page({
       header: { Authorization: `Bearer ${token}` },
       success: (res) => {
         wx.hideLoading();
-        console.log('export response:', JSON.stringify(res.data));
         if (res.statusCode === 200 && res.data.success) {
           wx.showToast({ title: '导出成功', icon: 'success' });
           wx.downloadFile({
