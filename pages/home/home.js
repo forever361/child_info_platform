@@ -102,11 +102,6 @@ Page({
     wx.navigateTo({ url: `/pages/detail/detail?id=${id}` });
   },
 
-  goRecord() {
-    this.hideAddMenu();
-    wx.navigateTo({ url: '/pages/record/record' });
-  },
-
   goBuildingObs() {
     this.hideAddMenu();
     wx.navigateTo({ url: '/pages/building_obs/building_obs' });

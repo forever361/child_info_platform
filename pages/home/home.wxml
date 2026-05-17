@@ -74,10 +74,6 @@
   <view class="add-menu-mask" wx:if="{{showAddMenu}}" bindtap="hideAddMenu">
     <view class="add-menu" catchtap="">
       <view class="add-menu-title">选择记录类型</view>
-      <view class="add-menu-item" bindtap="goRecord">
-        <text class="menu-icon">📝</text>
-        <text class="menu-label">通用观察记录</text>
-      </view>
       <view class="add-menu-item" bindtap="goBuildingObs">
         <text class="menu-icon">🏗️</text>
         <text class="menu-label">建构游戏观察</text>
