@@ -171,9 +171,7 @@
   <!-- 操作按钮 -->
   <view class="actions">
     <button type="primary" bindtap="goExportWord">导出Word</button>
-    <button type="default" bindtap="generateReport">一键生成成长报告</button>
     <button type="default" bindtap="goEdit">编辑</button>
-    <button type="warn" bindtap="handleDelete">删除</button>
   </view>
 </view>
 
