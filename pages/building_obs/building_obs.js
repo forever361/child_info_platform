@@ -65,6 +65,127 @@ const OBS_ITEMS_XIAOBAN = [
   }
 ];
 
+// 中班观察项目数据
+const OBS_ITEMS_ZHONGBAN = [
+  {
+    num: 1,
+    title: '我是否关注了游戏环境：',
+    options: [
+      '空间规划合理安全',
+      '材料投放丰富且有层次（主体材料+辅助材料）',
+      '满足幼儿当前建构需求'
+    ],
+    selected: [false, false, false]
+  },
+  {
+    num: 2,
+    title: '我是否关注了游戏主题与计划性：',
+    options: [
+      '幼儿有明确的搭建主题',
+      '幼儿能围绕主题持续搭建',
+      '幼儿开始出现"先想后做"的迹象'
+    ],
+    selected: [false, false, false]
+  },
+  {
+    num: 3,
+    title: '我是否关注了建构技能与合作：',
+    options: [
+      '幼儿能运用架空、围合、模式等中班典型技能',
+      '幼儿愿意与同伴一起搭建',
+      '幼儿能简单分工（如"你拿这个，我搭这里"）'
+    ],
+    selected: [false, false, false]
+  },
+  {
+    num: 4,
+    title: '我是否关注到幼儿重点领域的学习与发展（观察1-2点）：',
+    options: [
+      '数学：在搭建中感知方位（如能感知中间、旁边等方位）',
+      '科学：能根据材料特点有选择地使用（如"这块大的放下面更稳"）',
+      '艺术：关注作品的美感（平衡、对称）',
+      '其他：如数量关系、分类、排序、测量、稳定性等'
+    ],
+    selected: [false, false, false, false]
+  },
+  {
+    num: 5,
+    title: '我是否关注了幼儿的学习品质：',
+    options: [
+      '幼儿积极主动参与搭建',
+      '遇到困难愿意尝试解决',
+      '愿意与同伴合作，尝试协商',
+      '创造性使用游戏材料，建构作品比较逼真'
+    ],
+    selected: [false, false, false, false]
+  }
+];
+
+// 大班观察项目数据
+const OBS_ITEMS_DABAN = [
+  {
+    num: 1,
+    title: '我是否关注了游戏环境：',
+    options: [
+      '空间规划合理安全',
+      '材料投放丰富且有层次（主体材料+辅助材料）',
+      '满足幼儿当前建构需求'
+    ],
+    selected: [false, false, false]
+  },
+  {
+    num: 2,
+    title: '我是否关注了游戏计划与目的性：',
+    options: [
+      '幼儿能事先计划或画出设计图',
+      '幼儿能按计划搭建，并在过程中灵活调整',
+      '幼儿有明确的搭建主题，并能坚持完成'
+    ],
+    selected: [false, false, false]
+  },
+  {
+    num: 3,
+    title: '我是否关注了建构技能与创造性：',
+    options: [
+      '幼儿能熟练运用多种建构技能（架空、围合、盖顶、交叉等）',
+      '幼儿能关注细节，进行装饰或丰富，建构物逼真、复杂',
+      '幼儿能用建构作品进行假想游戏'
+    ],
+    selected: [false, false, false]
+  },
+  {
+    num: 4,
+    title: '我是否关注了合作与分工：',
+    options: [
+      '幼儿能与同伴共同设计方案',
+      '幼儿能协商分工、互相配合',
+      '幼儿在合作中能表达自己的想法，也能听取他人意见'
+    ],
+    selected: [false, false, false]
+  },
+  {
+    num: 5,
+    title: '我是否关注重点领域发展（观察1-2点）：',
+    options: [
+      '数学：能参照设计图搭建，在搭建中使用方位词（如"在我的左边搭高楼，右边搭花园"）',
+      '科学：能根据材料特点灵活选择，关注结构的稳定与平衡',
+      '艺术：作品有美感，关注对称、比例、均衡',
+      '其他：如形体、数量关系、分类、排序、测量、稳定性等'
+    ],
+    selected: [false, false, false, false]
+  },
+  {
+    num: 6,
+    title: '我是否关注幼儿的学习品质：',
+    options: [
+      '幼儿积极主动、认真专注',
+      '遇到困难敢于探究、尝试多种解决方法',
+      '能自我反思，提出改进想法'
+    ],
+    selected: [false, false, false]
+  }
+];
+
 const INTERVENE_OPTIONS = [
   '存在安全隐患',
   '幼儿持续尝试但无法突破',
@@ -177,8 +298,12 @@ Page({
   },
 
   loadObsItemsByLevel(levelIndex) {
-    // 目前只有小班数据，后续可扩展中班、大班
-    const obsItems = JSON.parse(JSON.stringify(OBS_ITEMS_XIAOBAN));
+    const levelMap = {
+      0: OBS_ITEMS_XIAOBAN,
+      1: OBS_ITEMS_ZHONGBAN,
+      2: OBS_ITEMS_DABAN
+    };
+    const obsItems = JSON.parse(JSON.stringify(levelMap[levelIndex] || OBS_ITEMS_XIAOBAN));
     this.setData({ obsItems, levelIndex });
   },
 
@@ -306,8 +431,9 @@ Page({
       // 日期
       const obsDate = obs.observation_date ? obs.observation_date.slice(0, 10) : this.data.obsDate;
 
-      // 观察项目（用已保存的selected状态）
-      let obsItems = JSON.parse(JSON.stringify(OBS_ITEMS_XIAOBAN));
+      // 观察项目（根据年龄班加载对应模板，再用已保存的selected状态）
+      const levelMap = { 0: OBS_ITEMS_XIAOBAN, 1: OBS_ITEMS_ZHONGBAN, 2: OBS_ITEMS_DABAN };
+      let obsItems = JSON.parse(JSON.stringify(levelMap[levelIndex] || OBS_ITEMS_XIAOBAN));
       if (obsData.obsItems && obsData.obsItems.length > 0) {
         obsData.obsItems.forEach((saved, i) => {
           if (obsItems[i] && saved.selected) {
