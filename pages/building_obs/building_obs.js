@@ -453,7 +453,49 @@ Page({
     }
   },
 
-  handleExport() {
-    wx.showToast({ title: '导出功能开发中', icon: 'none' });
+  async handleExport() {
+    if (!this.data.recordId) {
+      return wx.showToast({ title: '请先保存记录再导出', icon: 'none' });
+    }
+    wx.showLoading({ title: '正在导出...' });
+    try {
+      const token = wx.getStorageSync('token');
+      const res = await new Promise((resolve, reject) => {
+        wx.request({
+          url: 'https://aixint.cn/api/export/building-word/' + this.data.recordId,
+          method: 'POST',
+          header: { Authorization: `Bearer ${token}` },
+          success: (r) => r.statusCode === 200 ? resolve(r.data) : reject(new Error(r.data.error || '导出失败')),
+          fail: reject
+        });
+      });
+      wx.hideLoading();
+      if (res.success && res.file) {
+        wx.showToast({ title: '导出成功', icon: 'success' });
+        // 打开文件
+        wx.openDocument({
+          filePath: res.file,
+          success: () => {},
+          fail: (e) => {
+            // 如果openDocument失败，尝试下载
+            wx.downloadFile({
+              url: 'https://aixint.cn' + res.file,
+              success: (dl) => {
+                wx.openDocument({
+                  filePath: dl.tempFilePath,
+                  showMenu: true,
+                  fail: () => wx.showToast({ title: '请在文件夹中查看', icon: 'none' })
+                });
+              }
+            });
+          }
+        });
+      } else {
+        wx.showToast({ title: res.error || '导出失败', icon: 'none' });
+      }
+    } catch (err) {
+      wx.hideLoading();
+      wx.showToast({ title: err.message || '导出失败', icon: 'none' });
+    }
   }
 });
