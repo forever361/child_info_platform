@@ -394,6 +394,26 @@ Page({
     this.setData({ loading: true });
 
     try {
+      // 上传 photoSlots 里的图片，替换临时路径为真实URL
+      const IMAGE_BASE = 'https://aixint.cn';
+      const uploadedPhotoSlots = await Promise.all(photoSlots.map(async (slot) => {
+        if (!slot.images || slot.images.length === 0) {
+          return slot;
+        }
+        const uploadedImages = await Promise.all(slot.images.map(async (img) => {
+          // 如果是临时路径或不含域名，才需要上传
+          if (img.startsWith('http://tmp') || img.startsWith('wxfile://') || !img.startsWith('http')) {
+            try {
+              return await api.uploadImage(img);
+            } catch (e) {
+              return img; // 失败保留原路径
+            }
+          }
+          return img;
+        }));
+        return { ...slot, images: uploadedImages };
+      }));
+
       const data = {
         record_type: 'building_obs',
         class_name: this.data.classList[classIndex],
@@ -417,7 +437,7 @@ Page({
           planSelected: this.data.planSelected,
           otherPlan: this.data.otherPlan,
           summary: this.data.summary,
-          photoSlots: this.data.photoSlots
+          photoSlots: uploadedPhotoSlots
         })
       };
 
