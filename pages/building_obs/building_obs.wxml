@@ -3,7 +3,7 @@
   <view class="header-info">
     <view class="header-row">
       <text class="label">教师：</text>
-      <text class="value">{{userName}}</text>
+      <input class="input-field" placeholder="请输入教师姓名" value="{{teacherName}}" bindinput="onInput" data-field="teacherName" />
     </view>
     <view class="header-row">
       <text class="label">日期：</text>

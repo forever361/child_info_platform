@@ -162,7 +162,8 @@ Page({
     
     this.setData({ 
       obsDate: dateStr,
-      userName: user ? user.name || user.nickName || '教师' : '教师'
+      teacherName: user ? (user.name || user.nickName || '') : '',
+      userName: user ? (user.name || user.nickName || '教师') : '教师'
     });
 
     // 加载观察项目数据
@@ -356,6 +357,7 @@ Page({
       }
 
       this.setData({
+        teacherName: obsData.teacherName || '',
         targetName: obs.target_name || '',
         classIndex: classIndex >= 0 ? classIndex : 0,
         obsDate,
@@ -414,6 +416,7 @@ Page({
         target_name: targetName,
         observation_date: obsDate,
         obs_data: JSON.stringify({
+          teacherName: this.data.teacherName,
           gameType: this.data.gameTypeList[this.data.gameTypeIndex],
           level: this.data.levelList[this.data.levelIndex],
           obsItems: this.data.obsItems,
