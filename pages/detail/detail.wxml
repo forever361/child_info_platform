@@ -17,7 +17,7 @@
     <view class="card">
       <view class="info-row">
         <text class="info-label">游戏类型：</text>
-        <text class="info-value">{{buildingObsData.gameType}}</text>
+        <text class="info-value">建构游戏</text>
       </view>
       <view class="info-row">
         <text class="info-label">年龄班：</text>
