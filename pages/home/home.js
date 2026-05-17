@@ -27,14 +27,21 @@ Page({
     searchName: '',
     recordType: '',
     classFilterIndex: 0,
-    classFilterList: ['全部班级', '小班1班', '小班2班', '中班1班', '中班2班', '大班1班', '大班2班']
+    classFilterList: ['全部班级', '小班1班', '小班2班', '中班1班', '中班2班', '大班1班', '大班2班'],
+    typeFilterList: [
+      { value: '', label: '游戏类型' },
+      { value: 'building_obs', label: '建构游戏' },
+      { value: 'role_game', label: '角色游戏' },
+      { value: 'art', label: '艺术创作' },
+      { value: 'sand_water', label: '沙水游戏' }
+    ]
   },
 
   onLoad() {
     const user = wx.getStorageSync('user');
     const openid = wx.getStorageSync('openid') || '';
     const openidMask = openid ? '*' + openid.slice(-4) : '';
-    this.setData({ user, openid, openidMask });
+    this.setData({ user, openid, openidMask, currentTypeLabel: '游戏类型' });
     this.fetchList();
   },
 
@@ -120,7 +127,15 @@ Page({
   },
 
   onTypeChange(e) {
-    this.setData({ recordType: e.detail.value, page: 1, list: [], noMore: false });
+    const index = parseInt(e.detail.value);
+    const label = this.data.typeFilterList[index]?.label || '游戏类型';
+    this.setData({ 
+      recordType: this.data.typeFilterList[index]?.value || '',
+      currentTypeLabel: label,
+      page: 1, 
+      list: [], 
+      noMore: false 
+    });
     this.fetchList();
   },
 

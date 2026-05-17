@@ -25,9 +25,9 @@
         {{classFilterList[classFilterIndex] || '全部班级'}}
       </view>
     </picker>
-    <picker bindchange="onTypeChange" value="{{recordType}}" range="{{[{value:'',label:'全部'},{value:'building_obs',label:'建构游戏'},{value:'individual',label:'个体'},{value:'event',label:'事件'}]}}" range-key="label">
+    <picker bindchange="onTypeChange" value="{{recordType}}" range="{{typeFilterList}}" range-key="label">
       <view class="filter-picker">
-        {{recordType === 'building_obs' ? '建构游戏' : recordType === 'individual' ? '个体' : recordType === 'event' ? '事件' : '全部'}}
+        {{currentTypeLabel}}
       </view>
     </picker>
   </view>
