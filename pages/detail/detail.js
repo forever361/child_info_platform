@@ -151,8 +151,15 @@ Page({
   // 预览图片
   previewImage(e) {
     const { url } = e.currentTarget.dataset;
+    let urls = this.data.observation.images || [];
+    // building_obs 类型的图片在 photoSlots 里
+    if (this.data.observation.record_type === 'building_obs' && this.data.buildingObsData && this.data.buildingObsData.photoSlots) {
+      urls = this.data.buildingObsData.photoSlots.reduce((all, slot) => 
+        [...all, ...(slot.images || [])], []
+      );
+    }
     wx.previewImage({
-      urls: this.data.observation.images,
+      urls,
       current: url
     });
   },
