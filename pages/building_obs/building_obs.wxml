@@ -177,6 +177,6 @@
   <!-- 提交按钮 -->
   <view class="submit-bar">
     <button class="submit-btn" bindtap="handleSave" loading="{{loading}}">保存记录</button>
-    <button class="export-btn" bindtap="handleExport">导出Word</button>
+    <button class="export-btn" bindtap="handleExport" wx:if="{{isEdit}}">导出Word</button>
   </view>
 </view>
