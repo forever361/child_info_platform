@@ -156,7 +156,14 @@ Page({
     // 初始化日期
     const now = new Date();
     const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    this.setData({ obsDate: dateStr });
+    
+    // 获取当前用户信息
+    const user = wx.getStorageSync('user');
+    
+    this.setData({ 
+      obsDate: dateStr,
+      userName: user ? user.name || user.nickName || '教师' : '教师'
+    });
 
     // 加载观察项目数据
     this.loadObsItemsByLevel(0);
