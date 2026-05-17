@@ -1,11 +1,12 @@
 const api = require('../../utils/api.js');
 
-const formatDate = (dateStr) => {
+const formatDate = (dateStr, addEightHours = true) => {
   if (!dateStr) return '';
   try {
-    // 数据库存的是北京时间，JS默认当UTC解析，需要加8小时
     const d = new Date(dateStr);
-    d.setHours(d.getHours() + 8);
+    if (addEightHours) {
+      d.setHours(d.getHours() + 8);
+    }
     const pad = n => String(n).padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   } catch (e) {
@@ -85,7 +86,7 @@ Page({
         return {
           ...item,
           observation_date: formatDate(item.observation_date),
-          created_at: formatDate(item.created_at),
+          created_at: formatDate(item.created_at, false),
           summary
         };
       });
