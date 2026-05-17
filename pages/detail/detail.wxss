@@ -272,6 +272,14 @@
   line-height: 1.6;
 }
 
+.plan-input {
+  display: block;
+  margin: 6rpx 0 6rpx 40rpx;
+  font-size: 24rpx;
+  color: #888;
+  line-height: 1.5;
+}
+
 .photo-section {
   background: #f9f9f9;
   border-radius: 12rpx;

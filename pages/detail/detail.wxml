@@ -88,10 +88,11 @@
     </view>
 
     <!-- 四、后续计划 -->
-    <view class="card" wx:if="{{buildingObsData.planSelected}}">
+    <view class="card" wx:if="{{buildingObsData.planInputs || buildingObsData.otherPlan}}">
       <view class="card-title">四、后续计划</view>
-      <view class="obs-checked">
-        <text wx:for="{{buildingObsData.planOptions}}" wx:for-item="opt" wx:for-index="optIdx" wx:key="optIdx" wx:if="{{buildingObsData.planSelected[optIdx]}}">✓ {{opt}}</text>
+      <view class="obs-checked" wx:for="{{buildingObsData.planOptions}}" wx:for-item="opt" wx:for-index="optIdx" wx:key="optIdx">
+        <text wx:if="{{buildingObsData.planInputs[optIdx]}}">✓ {{opt}}</text>
+        <text wx:if="{{buildingObsData.planInputs[optIdx]}}" class="plan-input">{{buildingObsData.planInputs[optIdx]}}</text>
       </view>
       <view class="obs-desc" wx:if="{{buildingObsData.otherPlan}}">
         <text class="desc-label">其他计划：</text>

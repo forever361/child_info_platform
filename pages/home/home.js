@@ -82,7 +82,7 @@ Page({
               .map(d => d.trim().slice(0, 30))
               .join('；');
             if (hasSummary) {
-              summary = '[反思] ' + obsData.summary.trim().slice(0, 50);
+              summary = '[小结] ' + obsData.summary.trim().slice(0, 50);
             } else if (descSnippet) {
               summary = descSnippet + (descSnippet.length >= 30 ? '…' : '');
             } else {
