@@ -136,7 +136,7 @@ Page({
     
     // 后续计划
     planOptions: PLAN_OPTIONS,
-    planSelected: [false, false, false, false],
+    planInputs: ['', '', '', ''],
     otherPlan: '',
     summary: '',
     
@@ -234,10 +234,12 @@ Page({
     this.setData({ shareSelected });
   },
 
-  onPlanCheck(e) {
-    const selected = e.detail.value.map(v => parseInt(v));
-    const planSelected = this.data.planOptions.map((_, i) => selected.includes(i));
-    this.setData({ planSelected });
+  onPlanInput(e) {
+    const index = parseInt(e.currentTarget.dataset.index);
+    const value = e.detail.value;
+    const planInputs = [...this.data.planInputs];
+    planInputs[index] = value;
+    this.setData({ planInputs });
   },
 
   // 照片操作
@@ -339,9 +341,9 @@ Page({
       }
 
       // 后续计划
-      let planSelected = [false, false, false, false];
-      if (obsData.planSelected) {
-        planSelected = obsData.planSelected;
+      let planInputs = ['', '', '', ''];
+      if (obsData.planInputs) {
+        planInputs = obsData.planInputs;
       }
 
       // 图片插槽（处理图片URL）
@@ -368,7 +370,7 @@ Page({
         strategySelected,
         effectivenessIndex,
         shareSelected,
-        planSelected,
+        planInputs,
         strategyReason: obsData.strategyReason || '',
         shareRecord: obsData.shareRecord || '',
         otherPlan: obsData.otherPlan || '',
@@ -431,7 +433,7 @@ Page({
           shareSelected: this.data.shareSelected,
           shareRecord: this.data.shareRecord,
           planOptions: this.data.planOptions,
-          planSelected: this.data.planSelected,
+          planInputs: this.data.planInputs,
           otherPlan: this.data.otherPlan,
           summary: this.data.summary,
           photoSlots: uploadedPhotoSlots

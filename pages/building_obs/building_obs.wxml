@@ -153,13 +153,14 @@
   <view class="section">
     <view class="section-title">四、后续计划</view>
 
-    <view class="obs-options">
-      <checkbox-group bindchange="onPlanCheck">
-        <label class="checkbox-item" wx:for="{{planOptions}}" wx:key="index">
-          <checkbox value="{{index}}" checked="{{planSelected[index]}}" />
-          <text class="checkbox-text">{{item}}</text>
-        </label>
-      </checkbox-group>
+    <view class="plan-options">
+      <view class="plan-item" wx:for="{{planOptions}}" wx:key="index">
+        <view class="plan-label">
+          <text class="plan-num">{{index + 1}}.</text>
+          <text class="plan-text">{{item}}</text>
+        </view>
+        <input class="plan-input" placeholder="请填写具体计划..." value="{{planInputs[index]}}" bindinput="onPlanInput" data-index="{{index}}" />
+      </view>
     </view>
 
     <view class="input-group">

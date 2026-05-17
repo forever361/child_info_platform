@@ -265,3 +265,44 @@
   font-size: 30rpx;
   border-radius: 44rpx;
 }
+
+.plan-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.plan-item {
+  background: #f9f9f9;
+  border-radius: 10rpx;
+  padding: 16rpx 20rpx;
+}
+
+.plan-label {
+  display: flex;
+  margin-bottom: 10rpx;
+}
+
+.plan-num {
+  color: #666;
+  font-size: 26rpx;
+  margin-right: 8rpx;
+}
+
+.plan-text {
+  color: #333;
+  font-size: 26rpx;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.plan-input {
+  width: 100%;
+  padding: 12rpx 16rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  background: #fff;
+  box-sizing: border-box;
+}
