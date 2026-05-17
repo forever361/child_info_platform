@@ -12,6 +12,12 @@
       </picker>
     </view>
     <view class="header-row">
+      <text class="label">年龄班：</text>
+      <picker bindchange="onLevelChange" value="{{levelIndex}}" range="{{levelList}}">
+        <text class="picker-value">{{levelList[levelIndex]}}</text>
+      </picker>
+    </view>
+    <view class="header-row">
       <text class="label">班级：</text>
       <picker bindchange="onClassChange" value="{{classIndex}}" range="{{classList}}">
         <text class="picker-value">{{classList[classIndex]}}</text>
@@ -25,12 +31,6 @@
       <text class="label">游戏类型：</text>
       <picker bindchange="onGameTypeChange" value="{{gameTypeIndex}}" range="{{gameTypeList}}">
         <text class="picker-value">{{gameTypeList[gameTypeIndex]}}</text>
-      </picker>
-    </view>
-    <view class="header-row">
-      <text class="label">年龄班：</text>
-      <picker bindchange="onLevelChange" value="{{levelIndex}}" range="{{levelList}}">
-        <text class="picker-value">{{levelList[levelIndex]}}</text>
       </picker>
     </view>
   </view>

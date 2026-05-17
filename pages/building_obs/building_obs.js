@@ -226,12 +226,19 @@ const PLAN_OPTIONS = [
 
 const GAME_TYPE_LIST = ['建构游戏（积木）', '角色游戏', '表演游戏', '沙水游戏', '艺术创作', '其他游戏'];
 
+// 年龄班对应的班级列表
+const CLASS_LIST_BY_LEVEL = [
+  ['小班1班', '小班2班', '小班3班'],
+  ['中班1班', '中班2班', '中班3班'],
+  ['大班1班', '大班2班', '大班3班']
+];
+
 Page({
   data: {
     userName: '',
     obsDate: '',
     classIndex: 0,
-    classList: ['小班1班', '小班2班', '小班3班', '中班1班', '中班2班', '中班3班', '大班1班', '大班2班', '大班3班'],
+    classList: CLASS_LIST_BY_LEVEL[0],
     targetName: '',
     gameTypeIndex: 0,
     gameTypeList: GAME_TYPE_LIST,
@@ -309,6 +316,11 @@ Page({
 
   onLevelChange(e) {
     const index = parseInt(e.detail.value);
+    this.setData({
+      levelIndex: index,
+      classList: CLASS_LIST_BY_LEVEL[index],
+      classIndex: 0
+    });
     this.loadObsItemsByLevel(index);
   },
 
@@ -426,8 +438,9 @@ Page({
       const gameTypeIndex = this.data.gameTypeList.indexOf(obsData.gameType || '');
       // 年龄班
       const levelIndex = this.data.levelList.indexOf(obsData.level || '小班');
-      // 班级
-      const classIndex = this.data.classList.indexOf(obs.class_name || '');
+      // 班级 - 从对应年龄班的列表中查找
+      const classListForLevel = CLASS_LIST_BY_LEVEL[levelIndex] || CLASS_LIST_BY_LEVEL[0];
+      const classIndex = classListForLevel.indexOf(obs.class_name || '');
       // 日期
       const obsDate = obs.observation_date ? obs.observation_date.slice(0, 10) : this.data.obsDate;
 
@@ -487,6 +500,7 @@ Page({
       this.setData({
         teacherName: obsData.teacherName || '',
         targetName: obs.target_name || '',
+        classList: classListForLevel,
         classIndex: classIndex >= 0 ? classIndex : 0,
         obsDate,
         gameTypeIndex: gameTypeIndex >= 0 ? gameTypeIndex : 0,
