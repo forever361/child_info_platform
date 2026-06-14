@@ -42,7 +42,27 @@ Page({
     const openid = wx.getStorageSync('openid') || '';
     const openidMask = openid ? '*' + openid.slice(-4) : '';
     this.setData({ user, openid, openidMask, currentTypeLabel: '游戏类型' });
+    this.fetchUserInfo();
     this.fetchList();
+  },
+
+  async fetchUserInfo() {
+    try {
+      const res = await wx.request({
+        url: 'https://aixint.cn/api/auth/me',
+        method: 'GET',
+        header: { Authorization: `Bearer ${wx.getStorageSync('token')}` }
+      });
+      if (res.data && res.data.user) {
+        // 统一字段名，/auth/me 返回 avatar_url，模板用 avatar
+        const userData = res.data.user;
+        if (userData.avatar_url && !userData.avatar) {
+          userData.avatar = userData.avatar_url;
+        }
+        wx.setStorageSync('user', userData);
+        this.setData({ user: userData });
+      }
+    } catch (e) {}
   },
 
   onShow() {
