@@ -7,4 +7,26 @@
   </button>
 
   <view class="tips">登录后可创建和管理幼儿观察记录</view>
+
+  <!-- 邀请码输入弹窗 -->
+  <view class="invite-mask" wx:if="{{showInviteModal}}" catchtap="onInviteMaskTap">
+    <view class="invite-modal" catchtap="">
+      <view class="invite-title">请输入邀请码</view>
+      <view class="invite-desc">首次使用需要邀请码，请联系园长获取</view>
+      <input
+        class="invite-input"
+        type="text"
+        password
+        placeholder="请输入邀请码"
+        value="{{inviteCode}}"
+        bindinput="onInviteInput"
+        focus="{{showInviteModal}}"
+      />
+      <view class="invite-error" wx:if="{{inviteError}}">{{inviteError}}</view>
+      <view class="invite-btns">
+        <button class="invite-cancel" bindtap="hideInviteModal">取消</button>
+        <button class="invite-confirm" type="primary" bindtap="submitInviteCode" loading="{{inviteLoading}}">确认</button>
+      </view>
+    </view>
+  </view>
 </view>
