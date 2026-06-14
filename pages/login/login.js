@@ -62,12 +62,14 @@ Page({
           wx.setStorageSync('token', res.data.token);
           wx.setStorageSync('user', res.data.user);
           wx.setStorageSync('openid', res.data.openid);
+          wx.removeStorageSync('tempUserInfo');
           wx.showToast({ title: '登录成功', icon: 'success' });
           setTimeout(() => {
             wx.navigateTo({ url: '/pages/home/home' });
           }, 1000);
         } else if (res.data && res.data.code === 'INVITE_CODE_INVALID') {
-          // 新用户但邀请码无效，弹出输入框
+          // 新用户但邀请码无效，弹出输入框，同时缓存 userInfo
+          wx.setStorageSync('tempUserInfo', userInfo);
           this.setData({ showInviteModal: true, inviteError: '', inviteCode: '' });
         } else {
           wx.showToast({ title: res.data?.error || '登录失败', icon: 'none' });
@@ -88,6 +90,7 @@ Page({
 
   hideInviteModal() {
     this.setData({ showInviteModal: false, inviteCode: '', inviteError: '' });
+    wx.removeStorageSync('tempUserInfo');
   },
 
   onInviteInput(e) {
@@ -95,7 +98,7 @@ Page({
   },
 
   submitInviteCode() {
-    const { inviteCode, _pendingCode, _pendingUserInfo } = this.data;
+    const { inviteCode } = this.data;
     if (!inviteCode || !inviteCode.trim()) {
       this.setData({ inviteError: '请输入邀请码' });
       return;
@@ -103,37 +106,53 @@ Page({
 
     this.setData({ inviteLoading: true, inviteError: '' });
 
-    // 用邀请码重新登录
-    wx.request({
-      url: 'https://aixint.cn/api/auth/login',
-      method: 'POST',
-      header: { 'Content-Type': 'application/json' },
-      data: {
-        code: _pendingCode,
-        userInfo: {
-          name: _pendingUserInfo?.nickName || '教师',
-          avatar: _pendingUserInfo?.avatarUrl || ''
-        },
-        invite_code: inviteCode.trim()
-      },
-      success: (res) => {
-        if (res.statusCode === 200 && res.data.token) {
-          wx.setStorageSync('token', res.data.token);
-          wx.setStorageSync('user', res.data.user);
-          wx.setStorageSync('openid', res.data.openid);
-          wx.showToast({ title: '登录成功', icon: 'success' });
-          setTimeout(() => {
-            wx.navigateTo({ url: '/pages/home/home' });
-          }, 1000);
-        } else {
-          this.setData({ inviteError: res.data?.error || '邀请码无效' });
+    // 重新获取 code，避免过期
+    wx.login({
+      success: (loginRes) => {
+        if (!loginRes.code) {
+          this.setData({ inviteError: '微信登录失败，请重试', inviteLoading: false });
+          return;
         }
+
+        // 从 Storage 拿 userInfo（微信授权时已存）
+        const userInfo = wx.getStorageSync('tempUserInfo') || { nickName: '教师' };
+
+        wx.request({
+          url: 'https://aixint.cn/api/auth/login',
+          method: 'POST',
+          header: { 'Content-Type': 'application/json' },
+          data: {
+            code: loginRes.code,
+            userInfo: {
+              name: userInfo.nickName || '教师',
+              avatar: userInfo.avatarUrl || ''
+            },
+            invite_code: inviteCode.trim()
+          },
+          success: (res) => {
+            if (res.statusCode === 200 && res.data.token) {
+              wx.setStorageSync('token', res.data.token);
+              wx.setStorageSync('user', res.data.user);
+              wx.setStorageSync('openid', res.data.openid);
+              wx.removeStorageSync('tempUserInfo');
+              wx.showToast({ title: '登录成功', icon: 'success' });
+              setTimeout(() => {
+                wx.navigateTo({ url: '/pages/home/home' });
+              }, 1000);
+            } else {
+              this.setData({ inviteError: res.data?.error || '邀请码无效' });
+            }
+          },
+          fail: () => {
+            this.setData({ inviteError: '网络错误，请重试' });
+          },
+          complete: () => {
+            this.setData({ inviteLoading: false });
+          }
+        });
       },
       fail: () => {
-        this.setData({ inviteError: '网络错误，请重试' });
-      },
-      complete: () => {
-        this.setData({ inviteLoading: false });
+        this.setData({ inviteError: '微信登录失败，请重试', inviteLoading: false });
       }
     });
   }
