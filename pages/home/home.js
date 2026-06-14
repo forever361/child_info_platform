@@ -31,8 +31,8 @@ Page({
     typeFilterList: [
       { value: '', label: '游戏类型' },
       { value: 'building_obs', label: '建构游戏' },
-      { value: 'role_game', label: '角色游戏' },
-      { value: 'art', label: '艺术创作' },
+      { value: 'role_play', label: '角色游戏' },
+      { value: 'science', label: '科学探究区' },
       { value: 'sand_water', label: '沙水游戏' }
     ]
   },
@@ -69,7 +69,7 @@ Page({
       const newList = (this.data.page === 1 ? res.list : [...this.data.list, ...res.list]).map(item => {
         let summary = item.content || '';
         // building_obs 类型：从 obs_data 生成摘要
-        if (item.record_type === 'building_obs' && item.obs_data) {
+        if (['building_obs', 'role_play', 'science', 'sand_water'].includes(item.record_type) && item.obs_data) {
           try {
             const obsData = JSON.parse(item.obs_data);
             const checkedCount = (obsData.obsItems || []).reduce((sum, it) => 
@@ -147,6 +147,21 @@ Page({
   goBuildingObs() {
     this.hideAddMenu();
     wx.navigateTo({ url: '/pages/building_obs/building_obs' });
+  },
+
+  goRolePlay() {
+    this.hideAddMenu();
+    wx.navigateTo({ url: '/pages/role_play/role_play' });
+  },
+
+  goScienceObs() {
+    this.hideAddMenu();
+    wx.navigateTo({ url: '/pages/science_obs/science_obs' });
+  },
+
+  goSandWaterObs() {
+    this.hideAddMenu();
+    wx.navigateTo({ url: '/pages/sand_water_obs/sand_water_obs' });
   },
 
   showAddMenu() {

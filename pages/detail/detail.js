@@ -66,9 +66,9 @@ Page({
         } catch (e) {}
       }
 
-      // 解析游戏观察数据 (building_obs)
+      // 解析游戏观察数据 (building_obs / role_play / science / sand_water)
       let buildingObsData = null;
-      if (obs.record_type === 'building_obs' && obs.obs_data) {
+      if (['building_obs', 'role_play', 'science', 'sand_water'].includes(obs.record_type) && obs.obs_data) {
         try {
           buildingObsData = JSON.parse(obs.obs_data);
           if (buildingObsData.photoSlots) {
@@ -224,6 +224,8 @@ Page({
     const obs = this.data.observation;
     if (obs.record_type === 'individual') {
       wx.navigateTo({ url: '/pages/record/record?id=' + obs.id });
+    } else if (obs.record_type === 'building_obs' || obs.record_type === 'role_play' || obs.record_type === 'science' || obs.record_type === 'sand_water') {
+      wx.navigateTo({ url: '/pages/home/home' });
     } else {
       wx.navigateBack();
     }
@@ -240,6 +242,12 @@ Page({
     const obs = this.data.observation;
     if (obs.record_type === 'building_obs') {
       wx.navigateTo({ url: '/pages/building_obs/building_obs?id=' + obs.id });
+    } else if (obs.record_type === 'role_play') {
+      wx.navigateTo({ url: '/pages/role_play/role_play?id=' + obs.id });
+    } else if (obs.record_type === 'science') {
+      wx.navigateTo({ url: '/pages/science_obs/science_obs?id=' + obs.id });
+    } else if (obs.record_type === 'sand_water') {
+      wx.navigateTo({ url: '/pages/sand_water_obs/sand_water_obs?id=' + obs.id });
     } else {
       wx.navigateTo({ url: '/pages/record/record?id=' + obs.id });
     }

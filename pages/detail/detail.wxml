@@ -3,7 +3,7 @@
   <view class="card">
     <view class="header">
       <text class="target">{{observation.target_name}}</text>
-      <text class="type">{{observation.record_type === 'building_obs' ? '建构游戏' : observation.record_type === 'individual' ? '个体' : '事件/小组'}}</text>
+      <text class="type">{{observation.record_type === 'building_obs' ? '建构游戏' : observation.record_type === 'role_play' ? '角色游戏' : observation.record_type === 'science' ? '科学探究' : observation.record_type === 'sand_water' ? '沙水游戏' : observation.record_type === 'individual' ? '个体' : '事件/小组'}}</text>
     </view>
     <view class="meta">
       <text>{{observation.class_name || observation.user_class}} · {{observation.user_name}}</text>
@@ -11,13 +11,13 @@
     </view>
   </view>
 
-  <!-- 建构游戏观察详情 -->
-  <block wx:if="{{observation.record_type === 'building_obs' && buildingObsData}}">
+  <!-- 游戏观察详情（建构/角色/科学/沙水） -->
+  <block wx:if="{{observation.record_type === 'building_obs' && buildingObsData || observation.record_type === 'role_play' && buildingObsData || observation.record_type === 'science' && buildingObsData || observation.record_type === 'sand_water' && buildingObsData}}">
     <!-- 游戏类型和班级 -->
     <view class="card">
       <view class="info-row">
         <text class="info-label">游戏类型：</text>
-        <text class="info-value">建构游戏</text>
+        <text class="info-value">{{buildingObsData.gameType || buildingObsData.level + '游戏'}}</text>
       </view>
       <view class="info-row">
         <text class="info-label">年龄班：</text>

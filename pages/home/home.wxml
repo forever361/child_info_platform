@@ -44,7 +44,7 @@
         <view class="item-header">
           <text class="target-name">{{item.target_name}}</text>
           <text class="class-name">{{item.class_name}}</text>
-          <text class="record-type">{{item.record_type === 'building_obs' ? '建构游戏' : item.record_type === 'individual' ? '个体' : '事件'}}</text>
+          <text class="record-type">{{item.record_type === 'building_obs' ? '建构游戏' : item.record_type === 'role_play' ? '角色游戏' : item.record_type === 'science' ? '科学探究' : item.record_type === 'sand_water' ? '沙水游戏' : item.record_type === 'individual' ? '个体' : '事件'}}</text>
         </view>
         <view class="item-content">{{item.summary || '暂无内容'}}</view>
         <view class="item-footer">
@@ -78,17 +78,17 @@
         <text class="menu-icon">🧱</text>
         <text class="menu-label">建构游戏观察</text>
       </view>
-      <view class="add-menu-item disabled">
+      <view class="add-menu-item" bindtap="goRolePlay">
         <text class="menu-icon">🎭</text>
-        <text class="menu-label">角色游戏观察（待开发）</text>
+        <text class="menu-label">角色游戏观察</text>
       </view>
-      <view class="add-menu-item disabled">
-        <text class="menu-icon">🎨</text>
-        <text class="menu-label">艺术创作观察（待开发）</text>
+      <view class="add-menu-item" bindtap="goScienceObs">
+        <text class="menu-icon">🔬</text>
+        <text class="menu-label">科学探究区观察</text>
       </view>
-      <view class="add-menu-item disabled">
+      <view class="add-menu-item" bindtap="goSandWaterObs">
         <text class="menu-icon">🏖️</text>
-        <text class="menu-label">沙水游戏观察（待开发）</text>
+        <text class="menu-label">沙水游戏观察</text>
       </view>
       <view class="add-menu-cancel" bindtap="hideAddMenu">取消</view>
     </view>

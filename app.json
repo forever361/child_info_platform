@@ -4,6 +4,9 @@
     "pages/home/home",
     "pages/record/record",
     "pages/building_obs/building_obs",
+    "pages/role_play/role_play",
+    "pages/science_obs/science_obs",
+    "pages/sand_water_obs/sand_water_obs",
     "pages/detail/detail",
     "pages/export/export",
     "pages/report/report"
