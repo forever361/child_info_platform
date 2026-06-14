@@ -379,6 +379,12 @@ Page({
     this.setData({ planInputs });
   },
 
+  onPlanLineChange(e) {
+    // auto-height 在换行时需要触发一次 setData 才会重新计算高度
+    const index = parseInt(e.currentTarget.dataset.index);
+    this.setData({ [`planInputs[${index}]`]: this.data.planInputs[index] });
+  },
+
   // 照片操作
   addPhoto(e) {
     const slotIndex = e.currentTarget.dataset.slot;

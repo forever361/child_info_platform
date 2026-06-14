@@ -159,7 +159,7 @@
           <text class="plan-num">{{index + 1}}.</text>
           <text class="plan-text">{{item}}</text>
         </view>
-        <input class="plan-input" placeholder="请填写具体计划..." value="{{planInputs[index]}}" bindinput="onPlanInput" data-index="{{index}}" />
+        <textarea class="plan-input" placeholder="请填写具体计划..." value="{{planInputs[index]}}" bindinput="onPlanInput" bindlinechange="onPlanLineChange" data-index="{{index}}" auto-height />
       </view>
     </view>
 
